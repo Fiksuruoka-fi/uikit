@@ -58,22 +58,12 @@ export default {
         container: false,
     },
 
-    computed: {
-        boundary({ boundary }, $el) {
-            return boundary === true ? window : query(boundary, $el);
-        },
-
-        clsDrop({ clsDrop }) {
-            return clsDrop || `uk-${this.$options.name}`;
-        },
-
-        clsPos() {
-            return this.clsDrop;
-        },
-    },
-
     created() {
         this.tracker = new MouseTracker();
+    },
+
+    beforeConnect() {
+        this.clsDrop = this.$props.clsDrop || `uk-${this.$options.name}`;
     },
 
     connected() {
@@ -142,7 +132,7 @@ export default {
                 if (this.isToggled()) {
                     this.hide(false);
                 } else {
-                    this.show(toggle.$el, false);
+                    this.show(toggle?.$el, false);
                 }
             },
         },
@@ -154,7 +144,7 @@ export default {
 
             handler(e, toggle) {
                 e.preventDefault();
-                this.show(toggle.$el);
+                this.show(toggle?.$el);
             },
         },
 
@@ -224,9 +214,7 @@ export default {
 
                 this.tracker.init();
 
-                once(
-                    this.$el,
-                    'hide',
+                for (const handler of [
                     on(
                         document,
                         pointerDown,
@@ -248,19 +236,16 @@ export default {
                                 true
                             )
                     ),
-                    { self: true }
-                );
 
-                once(
-                    this.$el,
-                    'hide',
                     on(document, 'keydown', (e) => {
                         if (e.keyCode === 27) {
                             this.hide(false);
                         }
                     }),
-                    { self: true }
-                );
+                    on(window, 'resize', () => this.$emit()),
+                ]) {
+                    once(this.$el, 'hide', handler, { self: true });
+                }
             },
         },
 
@@ -298,8 +283,6 @@ export default {
                 this.position();
             }
         },
-
-        events: ['resize'],
     },
 
     methods: {
@@ -370,28 +353,25 @@ export default {
         },
 
         position() {
+            const boundary = query(this.boundary, this.$el) || window;
             removeClass(this.$el, `${this.clsDrop}-stack`);
             toggleClass(this.$el, `${this.clsDrop}-boundary`, this.boundaryAlign);
 
-            const boundary = offset(this.boundary);
-            const alignTo = this.boundaryAlign ? boundary : offset(this.target);
+            const boundaryOffset = offset(boundary);
+            const targetOffset = offset(this.target);
+            const alignTo = this.boundaryAlign ? boundaryOffset : targetOffset;
 
-            if (this.align === 'justify') {
+            if (this.pos[1] === 'justify') {
                 const prop = this.getAxis() === 'y' ? 'width' : 'height';
                 css(this.$el, prop, alignTo[prop]);
             } else if (
-                this.boundary &&
                 this.$el.offsetWidth >
-                    Math.max(boundary.right - alignTo.left, alignTo.right - boundary.left)
+                Math.max(boundaryOffset.right - alignTo.left, alignTo.right - boundaryOffset.left)
             ) {
                 addClass(this.$el, `${this.clsDrop}-stack`);
             }
 
-            this.positionAt(
-                this.$el,
-                this.boundaryAlign ? this.boundary : this.target,
-                this.boundary
-            );
+            this.positionAt(this.$el, this.boundaryAlign ? boundary : this.target, boundary);
         },
     },
 };

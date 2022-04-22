@@ -1,4 +1,4 @@
-/*! UIkit 3.12.2 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
+/*! UIkit 3.13.10 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('uikit-util')) :
@@ -592,6 +592,15 @@
       uikitUtil.trigger(el, uikitUtil.createEvent(type, false, false, data));
     }
 
+    var Resize = {
+      connected() {var _this$$options$resize;
+        this.registerObserver(
+        uikitUtil.observeResize(((_this$$options$resize = this.$options.resizeTargets) == null ? void 0 : _this$$options$resize.call(this)) || this.$el, () =>
+        this.$emit('resize')));
+
+
+      } };
+
     var SliderAutoplay = {
       props: {
         autoplay: Boolean,
@@ -930,7 +939,7 @@
         } } };
 
     var Slider = {
-      mixins: [SliderAutoplay, SliderDrag, SliderNav],
+      mixins: [SliderAutoplay, SliderDrag, SliderNav, Resize],
 
       props: {
         clsActivated: Boolean,
@@ -1365,7 +1374,10 @@
 
 
           // Image
-          if (type === 'image' || src.match(/\.(avif|jpe?g|a?png|gif|svg|webp)($|\?)/i)) {
+          if (
+          type === 'image' ||
+          src.match(/\.(avif|jpe?g|jfif|a?png|gif|svg|webp)($|\?)/i))
+          {
             try {
               const { width, height } = await uikitUtil.getImage(src, attrs.srcset, attrs.size);
               this.setItem(item, createEl('img', { src, width, height, alt, ...attrs }));
@@ -1554,8 +1566,8 @@
           return this.panel.show(index);
         },
 
-        hide() {
-          return this.panel && this.panel.hide();
+        hide() {var _this$panel;
+          return (_this$panel = this.panel) == null ? void 0 : _this$panel.hide();
         } } };
 
 

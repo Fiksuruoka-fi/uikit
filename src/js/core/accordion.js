@@ -5,6 +5,7 @@ import {
     $,
     $$,
     attr,
+    fastdom,
     filter,
     getIndex,
     hasClass,
@@ -47,7 +48,7 @@ export default {
     computed: {
         items: {
             get({ targets }, $el) {
-                return $$(targets, $el);
+                return $$(targets, $el).filter((el) => $(this.content, el));
             },
 
             watch(items, prev) {
@@ -135,9 +136,11 @@ export default {
 
                     if (show) {
                         const toggle = $(this.$props.toggle, el);
-                        if (!isInView(toggle)) {
-                            scrollIntoView(toggle, { offset: this.offset });
-                        }
+                        fastdom.read(() => {
+                            if (!isInView(toggle)) {
+                                scrollIntoView(toggle, { offset: this.offset });
+                            }
+                        });
                     }
                 });
             }

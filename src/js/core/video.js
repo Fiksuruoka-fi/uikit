@@ -23,13 +23,9 @@ export default {
         autoplay: true,
     },
 
-    computed: {
-        inView({ autoplay }) {
-            return autoplay === 'inview';
-        },
-    },
-
     connected() {
+        this.inView = this.autoplay === 'inview';
+
         if (this.inView && !hasAttr(this.$el, 'preload')) {
             this.$el.preload = 'none';
         }
@@ -38,7 +34,7 @@ export default {
             mute(this.$el);
         }
 
-        this.registerObserver(observeIntersection(this.$el, () => this.$emit('scroll'), {}, false));
+        this.registerObserver(observeIntersection(this.$el, () => this.$emit(), {}, false));
     },
 
     update: {
@@ -60,7 +56,5 @@ export default {
                 play(this.$el);
             }
         },
-
-        events: ['resize', 'scroll'],
     },
 };

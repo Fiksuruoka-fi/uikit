@@ -1,4 +1,4 @@
-/*! UIkit 3.12.2 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
+/*! UIkit 3.13.10 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('uikit-util')) :
@@ -210,38 +210,28 @@
       props: {
         pos: String,
         offset: null,
-        flip: Boolean,
-        clsPos: String },
+        flip: Boolean },
 
 
       data: {
         pos: "bottom-" + (uikitUtil.isRtl ? 'right' : 'left'),
         flip: true,
-        offset: false,
-        clsPos: '' },
+        offset: false },
 
 
-      computed: {
-        pos(_ref) {let { pos } = _ref;
-          return pos.split('-').concat('center').slice(0, 2);
-        },
-
-        dir() {
-          return this.pos[0];
-        },
-
-        align() {
-          return this.pos[1];
-        } },
-
+      connected() {
+        this.pos = this.$props.pos.split('-').concat('center').slice(0, 2);
+        this.dir = this.pos[0];
+        this.align = this.pos[1];
+      },
 
       methods: {
         positionAt(element, target, boundary) {
-          uikitUtil.removeClasses(element, this.clsPos + "-(top|bottom|left|right)(-[a-z]+)?");
+          const axis = this.getAxis();
+          const dir = this.pos[0];
+          const align = this.pos[1];
 
           let { offset } = this;
-          const axis = this.getAxis();
-
           if (!uikitUtil.isNumeric(offset)) {
             const node = uikitUtil.$(offset);
             offset = node ?
@@ -249,17 +239,16 @@
             uikitUtil.offset(target)[axis === 'x' ? 'right' : 'bottom'] :
             0;
           }
+          offset = uikitUtil.toPx(offset) + uikitUtil.toPx(uikitUtil.getCssVar('position-offset', element));
 
           const { x, y } = uikitUtil.positionAt(
           element,
           target,
-          axis === 'x' ?
-          uikitUtil.flipPosition(this.dir) + " " + this.align :
-          this.align + " " + uikitUtil.flipPosition(this.dir),
-          axis === 'x' ? this.dir + " " + this.align : this.align + " " + this.dir,
+          axis === 'x' ? uikitUtil.flipPosition(dir) + " " + align : align + " " + uikitUtil.flipPosition(dir),
+          axis === 'x' ? dir + " " + align : align + " " + dir,
           axis === 'x' ? "" + (
-          this.dir === 'left' ? -offset : offset) : " " + (
-          this.dir === 'top' ? -offset : offset),
+          dir === 'left' ? -offset : offset) : " " + (
+          dir === 'top' ? -offset : offset),
           null,
           this.flip,
           boundary).
@@ -267,8 +256,6 @@
 
           this.dir = axis === 'x' ? x : y;
           this.align = axis === 'x' ? y : x;
-
-          uikitUtil.toggleClass(element, this.clsPos + "-" + this.dir + "-" + this.align, this.offset === false);
         },
 
         getAxis() {
@@ -291,8 +278,7 @@
         delay: 0,
         animation: ['uk-animation-scale-up'],
         duration: 100,
-        cls: 'uk-active',
-        clsPos: 'uk-tooltip' },
+        cls: 'uk-active' },
 
 
       beforeConnect() {
@@ -347,9 +333,9 @@
 
         _show() {
           this.tooltip = uikitUtil.append(
-          this.container, "<div class=\"" +
-          this.clsPos + "\"> <div class=\"" +
-          this.clsPos + "-inner\">" + this.title + "</div> </div>");
+          this.container, "<div class=\"uk-" +
+          this.$options.name + "\"> <div class=\"uk-" +
+          this.$options.name + "-inner\">" + this.title + "</div> </div>");
 
 
 

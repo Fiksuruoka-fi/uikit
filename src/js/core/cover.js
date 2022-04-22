@@ -1,8 +1,9 @@
 import Video from './video';
-import { css, Dimensions, observeResize, parent } from 'uikit-util';
+import { css, Dimensions, parent } from 'uikit-util';
+import Resize from '../mixin/resize';
 
 export default {
-    mixins: [Video],
+    mixins: [Resize, Video],
 
     props: {
         width: Number,
@@ -13,8 +14,14 @@ export default {
         automute: true,
     },
 
-    connected() {
-        this.registerObserver(observeResize(this.$el, () => this.$emit('resize')));
+    events: {
+        'load loadedmetadata'() {
+            this.$emit('resize');
+        },
+    },
+
+    resizeTargets() {
+        return [this.$el, parent(this.$el)];
     },
 
     update: {

@@ -1,5 +1,127 @@
 # Changelog
 
+## 3.13.10 (April 20, 2022)
+
+### Fixed
+
+- Revert: Fix reposition Drop on scroll
+- Fix Toggle component does not `defaultPrevent()` click on anchor with touch gesture
+- Fix Sticky component uses wrong offsetParent while it's positioned fixed
+
+## 3.13.9 (April 20, 2022)
+
+### Fixed
+
+- Fix release
+
+## 3.13.8 (April 20, 2022)
+
+### Changed
+
+- Scrollspy component uses IntersectionObserver instead of scroll/resize events
+
+### Fixed
+
+- Fix Drop/Dropdowns component does not close on clicked `.uk-(drop|dropdown)-close` selector
+- Fix Accordion initially not closed
+- Fix Height Match component not matching correctly
+- Fix Margin component does not correctly listen for resize
+- Fix regression in Sticky component affecting height of placeholder
+- Fix Toggle not toggling after re-entering button with mouse before drop has closed itself
+- Fix reposition Drop on scroll
+
+## 3.13.7 (April 1, 2022)
+
+### Fixed
+
+- Fix regression in Drop component not updating its width if alignment is set to `justify`
+- Fix regression in Height Match component not updating its height when resized
+
+## 3.13.6 (April 1, 2022)
+
+### Removed
+
+- Image component no longer sets a `background-size` for elements with `background-size` set to `auto`
+
+
+### Fixed
+
+- Fix Position component
+- Fix regression in Upload component with `multiple` option disabled
+- Fix regression in Height Viewport component with `expand` option enabled
+- Fix regression in Slider/Slideshow Parallax
+
+## 3.13.5 (March 28, 2022)
+
+### Fixed
+
+- Fix regression in Drop component's `offset` option
+- Fix initial values for `@navbar-dropdown-margin` and `@navbar-dropdown-dropbar-margin-top`
+
+## 3.13.4 (March 25, 2022)
+
+### Fixed
+
+- Fix Tooltip margin
+
+## 3.13.3 (March 25, 2022)
+
+### Fixed
+
+- Fix importing UIkit in Next.js
+
+## 3.13.2 (March 25, 2022)
+
+### Changed
+
+- Use custom property for direction offset in components based on Position mixin
+- Add max-width to drops in Drop, Dropdown and Navbar components
+
+### Removed
+
+- Remove dropbar push mode from Navbar component
+
+### Fixed
+
+- Fix dropbar dropdown alignment
+- Fix dropbar dropdown top margin flickering
+- Fix Switcher component with disabled toggles
+- Fix responsiveness in Responsive component
+- Fix video autoplay
+- Fix importing UIkit in Next.js
+
+## 3.13.1 (March 18, 2022)
+
+### Fixed
+
+- Fix Switcher component with disabled toggles
+- Fix regression in Cover component
+
+## 3.13.0 (March 18, 2022)
+
+### Added
+
+- Add support for `<img>` element to icon image class in Icon component
+
+### Changed
+
+- Improve performance for large sites
+- Custom components have to listen for `resize` and `scroll` updates manually
+
+### Removed
+
+- Remove Edge Legacy (EdgeHTML) support
+- Remove Safari fallback for `focus-visible`
+- Remove deprecated Gif component
+- Remove option `width-element` in Sticky component
+
+### Fixed
+
+- Fix list bullet regression in List component
+- Fix regression in Modal component with `uk-modal-dialog` class
+- Fix Sticky component notices change in its offset parent's position
+- Fix Scrollspy component does not apply animation classes on hide
+
 ## 3.12.2 (March 14, 2022)
 
 ### Fixed
@@ -40,7 +162,7 @@
 
 - Deprecate `uk-img` for `<img>` element: Use native `loading="lazy"` attribute instead
 
-## Removed
+### Removed
 
 - Remove IE11 support
 - Removed `data-width` and `data-height` for `<img>` element from Image component. Use native attributes instead.
@@ -1123,7 +1245,7 @@
 
 - Image Component uses IntersectionObserver now
 
-## Removed
+### Removed
 
 - Remove `isReady` function
 - Form Custom component no longer sets `uk-hover` and `uk-focus` classes

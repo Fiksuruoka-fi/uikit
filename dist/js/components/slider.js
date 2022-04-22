@@ -1,4 +1,4 @@
-/*! UIkit 3.12.2 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
+/*! UIkit 3.13.10 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('uikit-util')) :
@@ -9,6 +9,15 @@
     var Class = {
       connected() {
         !uikitUtil.hasClass(this.$el, this.$name) && uikitUtil.addClass(this.$el, this.$name);
+      } };
+
+    var Resize = {
+      connected() {var _this$$options$resize;
+        this.registerObserver(
+        uikitUtil.observeResize(((_this$$options$resize = this.$options.resizeTargets) == null ? void 0 : _this$$options$resize.call(this)) || this.$el, () =>
+        this.$emit('resize')));
+
+
       } };
 
     var SliderAutoplay = {
@@ -349,7 +358,7 @@
         } } };
 
     var Slider = {
-      mixins: [SliderAutoplay, SliderDrag, SliderNav],
+      mixins: [SliderAutoplay, SliderDrag, SliderNav, Resize],
 
       props: {
         clsActivated: Boolean,
@@ -789,7 +798,7 @@
           return (
             finite ||
             Math.ceil(getWidth(this.list)) <
-            Math.floor(uikitUtil.dimensions(this.list).width + getMaxElWidth(this.list) + this.center));
+            Math.trunc(uikitUtil.dimensions(this.list).width + getMaxElWidth(this.list) + this.center));
 
         },
 

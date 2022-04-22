@@ -1,4 +1,4 @@
-/*! UIkit 3.12.2 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
+/*! UIkit 3.13.10 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('uikit-util')) :
@@ -15,17 +15,28 @@
         media: false },
 
 
-      computed: {
-        matchMedia() {
-          const media = toMedia(this.media);
-          return !media || window.matchMedia(media).matches;
-        } } };
+      connected() {
+        const media = toMedia(this.media);
+        this.mediaObj = window.matchMedia(media);
+        const handler = () => {
+          this.matchMedia = this.mediaObj.matches;
+          uikitUtil.trigger(this.$el, uikitUtil.createEvent('mediachange', false, true, [this.mediaObj]));
+        };
+        this.offMediaObj = uikitUtil.on(this.mediaObj, 'change', () => {
+          handler();
+          this.$emit('resize');
+        });
+        handler();
+      },
 
+      disconnected() {var _this$offMediaObj;
+        (_this$offMediaObj = this.offMediaObj) == null ? void 0 : _this$offMediaObj.call(this);
+      } };
 
 
     function toMedia(value) {
       if (uikitUtil.isString(value)) {
-        if (value[0] === '@') {
+        if (uikitUtil.startsWith(value, '@')) {
           const name = "breakpoint-" + value.substr(1);
           value = uikitUtil.toFloat(uikitUtil.getCssVar(name));
         } else if (isNaN(value)) {
@@ -33,7 +44,7 @@
         }
       }
 
-      return value && !isNaN(value) ? "(min-width: " + value + "px)" : false;
+      return value && uikitUtil.isNumeric(value) ? "(min-width: " + value + "px)" : '';
     }
 
     uikitUtil.memoize(async (src) => {
@@ -303,7 +314,7 @@
         if (!image.naturalWidth) {
           image.onload = () => {
             dimensions[src] = toDimensions(image);
-            uikitUtil.trigger(el, 'load');
+            uikitUtil.trigger(el, uikitUtil.createEvent('load', false));
           };
           return toDimensions(image);
         }
@@ -407,11 +418,13 @@
         selItem: '!li' },
 
 
-      computed: {
-        item(_ref, $el) {let { selItem } = _ref;
-          return uikitUtil.query(selItem, $el);
-        } },
+      beforeConnect() {
+        this.item = uikitUtil.query(this.selItem, this.$el);
+      },
 
+      disconnected() {
+        this.item = null;
+      },
 
       events: [
       {
@@ -423,7 +436,7 @@
           return this.item;
         },
 
-        handler(_ref2) {let { type, detail: { percent, duration, timing, dir } } = _ref2;
+        handler(_ref) {let { type, detail: { percent, duration, timing, dir } } = _ref;
           uikitUtil.fastdom.read(() => {
             const propsFrom = this.getCss(getCurrentPercent(type, dir, percent));
             const propsTo = this.getCss(isIn(type) ? 0.5 : dir > 0 ? 1 : 0);
@@ -458,7 +471,7 @@
           return this.item;
         },
 
-        handler(_ref3) {let { type, detail: { percent, dir } } = _ref3;
+        handler(_ref2) {let { type, detail: { percent, dir } } = _ref2;
           uikitUtil.fastdom.read(() => {
             const props = this.getCss(getCurrentPercent(type, dir, percent));
             uikitUtil.fastdom.write(() => uikitUtil.css(this.$el, props));
