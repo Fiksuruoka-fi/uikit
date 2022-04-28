@@ -1,4 +1,4 @@
-/*! UIkit 3.13.10 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
+/*! UIkit 3.14.0 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('uikit-util')) :
@@ -832,7 +832,7 @@
           let left = 0;
           const sets = [];
           const width = uikitUtil.dimensions(this.list).width;
-          for (let i in this.slides) {
+          for (let i = 0; i < this.slides.length; i++) {
             const slideWidth = uikitUtil.dimensions(this.slides[i]).width;
 
             if (left + slideWidth > width) {

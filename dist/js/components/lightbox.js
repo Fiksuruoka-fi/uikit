@@ -1,4 +1,4 @@
-/*! UIkit 3.13.10 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
+/*! UIkit 3.14.0 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('uikit-util')) :
@@ -500,7 +500,7 @@
       return (el, show) =>
       new Promise((resolve, reject) =>
       uikitUtil.once(el, 'show hide', () => {
-        el._reject && el._reject();
+        el._reject == null ? void 0 : el._reject();
         el._reject = reject;
 
         _toggle(el, show);
@@ -520,9 +520,13 @@
         const timer = setTimeout(() => {
           off();
           resolve();
-        }, uikitUtil.toMs(uikitUtil.css(transitionElement, 'transitionDuration')));
+        }, toMs(uikitUtil.css(transitionElement, 'transitionDuration')));
       })).
       then(() => delete el._reject);
+    }
+
+    function toMs(time) {
+      return time ? uikitUtil.endsWith(time, 'ms') ? uikitUtil.toFloat(time) : uikitUtil.toFloat(time) * 1000 : 0;
     }
 
     function Transitioner(prev, next, dir, _ref) {let { animation, easing } = _ref;
