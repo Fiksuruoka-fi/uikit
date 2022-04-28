@@ -1,4 +1,4 @@
-/*! UIkit 3.13.10 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
+/*! UIkit 3.14.0 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('uikit-util')) :
@@ -216,50 +216,49 @@
       data: {
         pos: "bottom-" + (uikitUtil.isRtl ? 'right' : 'left'),
         flip: true,
-        offset: false },
+        offset: false,
+        viewportPadding: 10 },
 
 
       connected() {
         this.pos = this.$props.pos.split('-').concat('center').slice(0, 2);
-        this.dir = this.pos[0];
-        this.align = this.pos[1];
+        this.axis = uikitUtil.includes(['top', 'bottom'], this.pos[0]) ? 'y' : 'x';
       },
 
       methods: {
         positionAt(element, target, boundary) {
-          const axis = this.getAxis();
-          const dir = this.pos[0];
-          const align = this.pos[1];
+          const [dir, align] = this.pos;
 
           let { offset } = this;
           if (!uikitUtil.isNumeric(offset)) {
             const node = uikitUtil.$(offset);
             offset = node ?
-            uikitUtil.offset(node)[axis === 'x' ? 'left' : 'top'] -
-            uikitUtil.offset(target)[axis === 'x' ? 'right' : 'bottom'] :
+            uikitUtil.offset(node)[this.axis === 'x' ? 'left' : 'top'] -
+            uikitUtil.offset(target)[this.axis === 'x' ? 'right' : 'bottom'] :
             0;
           }
           offset = uikitUtil.toPx(offset) + uikitUtil.toPx(uikitUtil.getCssVar('position-offset', element));
+          offset = [uikitUtil.includes(['left', 'top'], dir) ? -offset : +offset, 0];
 
-          const { x, y } = uikitUtil.positionAt(
-          element,
-          target,
-          axis === 'x' ? uikitUtil.flipPosition(dir) + " " + align : align + " " + uikitUtil.flipPosition(dir),
-          axis === 'x' ? dir + " " + align : align + " " + dir,
-          axis === 'x' ? "" + (
-          dir === 'left' ? -offset : offset) : " " + (
-          dir === 'top' ? -offset : offset),
-          null,
-          this.flip,
-          boundary).
-          target;
+          const attach = {
+            element: [uikitUtil.flipPosition(dir), align],
+            target: [dir, align] };
 
-          this.dir = axis === 'x' ? x : y;
-          this.align = axis === 'x' ? y : x;
-        },
 
-        getAxis() {
-          return this.dir === 'top' || this.dir === 'bottom' ? 'y' : 'x';
+          if (this.axis === 'y') {
+            for (const prop in attach) {
+              attach[prop] = attach[prop].reverse();
+            }
+            offset = offset.reverse();
+          }
+
+          uikitUtil.positionAt(element, target, {
+            attach,
+            offset,
+            boundary,
+            viewportPadding: this.viewportPadding,
+            flip: this.flip });
+
         } } };
 
     var Component = {
@@ -348,10 +347,12 @@
 
             this.positionAt(this.tooltip, this.$el);
 
+            const [dir, align] = getAlignment(this.tooltip, this.$el, this.pos);
+
             this.origin =
-            this.getAxis() === 'y' ?
-            uikitUtil.flipPosition(this.dir) + "-" + this.align :
-            this.align + "-" + uikitUtil.flipPosition(this.dir);
+            this.axis === 'y' ?
+            uikitUtil.flipPosition(dir) + "-" + align :
+            align + "-" + uikitUtil.flipPosition(dir);
           });
 
           this.toggleElement(this.tooltip, true);
@@ -386,6 +387,37 @@
       if (!uikitUtil.isFocusable(el)) {
         uikitUtil.attr(el, 'tabindex', '0');
       }
+    }
+
+    function getAlignment(el, target, _ref) {let [dir, align] = _ref;
+      const elOffset = uikitUtil.offset(el);
+      const targetOffset = uikitUtil.offset(target);
+      const properties = [
+      ['left', 'right'],
+      ['top', 'bottom']];
+
+
+      for (const props of properties) {
+        if (elOffset[props[0]] >= targetOffset[props[1]]) {
+          dir = props[1];
+          break;
+        }
+        if (elOffset[props[1]] <= targetOffset[props[0]]) {
+          dir = props[0];
+          break;
+        }
+      }
+
+      const props = uikitUtil.includes(properties[0], dir) ? properties[1] : properties[0];
+      if (elOffset[props[0]] === targetOffset[props[0]]) {
+        align = props[0];
+      } else if (elOffset[props[1]] === targetOffset[props[1]]) {
+        align = props[1];
+      } else {
+        align = 'center';
+      }
+
+      return [dir, align];
     }
 
     if (typeof window !== 'undefined' && window.UIkit) {

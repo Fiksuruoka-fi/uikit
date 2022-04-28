@@ -1,4 +1,4 @@
-/*! UIkit 3.13.10 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
+/*! UIkit 3.14.0 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('uikit-util')) :
@@ -57,16 +57,19 @@
 
       connected() {
         const media = toMedia(this.media);
-        this.mediaObj = window.matchMedia(media);
-        const handler = () => {
-          this.matchMedia = this.mediaObj.matches;
-          uikitUtil.trigger(this.$el, uikitUtil.createEvent('mediachange', false, true, [this.mediaObj]));
-        };
-        this.offMediaObj = uikitUtil.on(this.mediaObj, 'change', () => {
+        this.matchMedia = true;
+        if (media) {
+          this.mediaObj = window.matchMedia(media);
+          const handler = () => {
+            this.matchMedia = this.mediaObj.matches;
+            uikitUtil.trigger(this.$el, uikitUtil.createEvent('mediachange', false, true, [this.mediaObj]));
+          };
+          this.offMediaObj = uikitUtil.on(this.mediaObj, 'change', () => {
+            handler();
+            this.$emit('resize');
+          });
           handler();
-          this.$emit('resize');
-        });
-        handler();
+        }
       },
 
       disconnected() {var _this$offMediaObj;
@@ -163,7 +166,9 @@
 
       methods: {
         reset() {
-          uikitUtil.each(this.getCss(0), (_, prop) => uikitUtil.css(this.$el, prop, ''));
+          for (const prop in this.getCss(0)) {
+            uikitUtil.css(this.$el, prop, '');
+          }
         },
 
         getCss(percent) {
@@ -177,12 +182,16 @@
 
 
     function transformFn(prop, el, stops) {
-      const unit = getUnit(stops) || { x: 'px', y: 'px', rotate: 'deg' }[prop] || '';
+      let unit = getUnit(stops) || { x: 'px', y: 'px', rotate: 'deg' }[prop] || '';
       let transformFn;
 
       if (prop === 'x' || prop === 'y') {
         prop = "translate" + uikitUtil.ucfirst(prop);
         transformFn = (stop) => uikitUtil.toFloat(uikitUtil.toFloat(stop).toFixed(unit === 'px' ? 0 : 6));
+      } else if (prop === 'scale') {
+        unit = '';
+        transformFn = (stop) =>
+        getUnit([stop]) ? uikitUtil.toPx(stop, 'width', el, true) / el.offsetWidth : stop;
       }
 
       if (stops.length === 1) {
