@@ -1,4 +1,4 @@
-/*! UIkit 3.14.0 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
+/*! UIkit 3.14.1 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('uikit-util')) :
@@ -540,7 +540,7 @@
     }
 
     function isEqualList(listA, listB) {
-      return listA.length === listB.length && listA.every((el) => ~listB.indexOf(el));
+      return listA.length === listB.length && listA.every((el) => listB.includes(el));
     }
 
     function getSelector(_ref4) {let { filter } = _ref4;

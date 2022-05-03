@@ -1,4 +1,4 @@
-/*! UIkit 3.14.0 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
+/*! UIkit 3.14.1 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('uikit-util')) :
@@ -395,7 +395,7 @@
       return uikitUtil.isNumber(start) ? start + Math.abs(start - end) * p * (start < end ? 1 : -1) : +end;
     }
 
-    const unitRe = /^-?\d+([^\s]*)/;
+    const unitRe = /^-?\d+(\S*)/;
     function getUnit(stops, defaultUnit) {
       for (const stop of stops) {
         const match = stop.match == null ? void 0 : stop.match(unitRe);

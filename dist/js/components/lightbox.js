@@ -1,4 +1,4 @@
-/*! UIkit 3.14.0 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
+/*! UIkit 3.14.1 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('uikit-util')) :
@@ -97,6 +97,7 @@
         cls: Boolean,
         animation: 'list',
         duration: Number,
+        velocity: Number,
         origin: String,
         transition: String },
 
@@ -105,8 +106,9 @@
         cls: false,
         animation: [false],
         duration: 200,
+        velocity: 0.2,
         origin: false,
-        transition: 'linear',
+        transition: 'ease',
         clsEnter: 'uk-togglabe-enter',
         clsLeave: 'uk-togglabe-leave',
 
@@ -116,7 +118,8 @@
           paddingTop: '',
           paddingBottom: '',
           marginTop: '',
-          marginBottom: '' },
+          marginBottom: '',
+          boxShadow: '' },
 
 
         hideProps: {
@@ -125,7 +128,8 @@
           paddingTop: 0,
           paddingBottom: 0,
           marginTop: 0,
-          marginBottom: 0 } },
+          marginBottom: 0,
+          boxShadow: 'none' } },
 
 
 
@@ -220,7 +224,15 @@
 
 
 
-    function toggleHeight(_ref3) {let { isToggled, duration, initProps, hideProps, transition, _toggle } = _ref3;
+    function toggleHeight(_ref3)
+
+
+
+
+
+
+
+    {let { isToggled, duration, velocity, initProps, hideProps, transition, _toggle } = _ref3;
       return (el, show) => {
         const inProgress = uikitUtil.Transition.inProgress(el);
         const inner = el.hasChildNodes() ?
@@ -241,6 +253,8 @@
         uikitUtil.fastdom.flush();
 
         const endHeight = uikitUtil.height(el) + (inProgress ? 0 : inner);
+        duration = velocity * el.offsetHeight + duration;
+
         uikitUtil.height(el, currentHeight);
 
         return (
