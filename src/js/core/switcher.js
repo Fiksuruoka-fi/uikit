@@ -1,59 +1,70 @@
+import Lazyload from '../mixin/lazyload';
+import Swipe from '../mixin/swipe';
 import Togglable from '../mixin/togglable';
-import {$$, attr, children, css, data, endsWith, findIndex, getIndex, hasClass, matches, queryAll, toggleClass, toNodes, within} from 'uikit-util';
+import {
+    $$,
+    attr,
+    children,
+    css,
+    data,
+    endsWith,
+    findIndex,
+    getIndex,
+    hasClass,
+    matches,
+    queryAll,
+    ready,
+    toggleClass,
+    toNodes,
+    within,
+} from 'uikit-util';
 
 export default {
-
-    mixins: [Togglable],
+    mixins: [Lazyload, Swipe, Togglable],
 
     args: 'connect',
 
     props: {
         connect: String,
         toggle: String,
+        itemNav: String,
         active: Number,
-        swiping: Boolean
     },
 
     data: {
         connect: '~.uk-switcher',
         toggle: '> * > :first-child',
+        itemNav: false,
         active: 0,
-        swiping: true,
         cls: 'uk-active',
-        attrItem: 'uk-switcher-item'
+        attrItem: 'uk-switcher-item',
     },
 
     computed: {
-
         connects: {
-
-            get({connect}, $el) {
+            get({ connect }, $el) {
                 return queryAll(connect, $el);
             },
 
             watch(connects) {
-
                 if (this.swiping) {
                     css(connects, 'touch-action', 'pan-y pinch-zoom');
                 }
 
                 const index = this.index();
-                this.connects.forEach(el =>
-                    children(el).forEach((child, i) =>
-                        toggleClass(child, this.cls, i === index)
-                    )
+                this.connects.forEach((el) =>
+                    children(el).forEach((child, i) => toggleClass(child, this.cls, i === index))
                 );
-
             },
 
-            immediate: true
-
+            immediate: true,
         },
 
         toggles: {
-
-            get({toggle}, $el) {
-                return $$(toggle, $el).filter(el => !matches(el, '.uk-disabled *, .uk-disabled, [disabled]'));
+            get({ toggle }, $el) {
+                return $$(toggle, $el).filter(
+                    (el) => !matches(el, '.uk-disabled *, .uk-disabled, [disabled]')
+                );
             },
 
             watch(toggles) {
@@ -61,20 +72,29 @@ export default {
                 this.show(~active ? active : toggles[this.active] || toggles[0]);
             },
 
-            immediate: true
-
+            immediate: true,
         },
 
         children() {
-            return children(this.$el).filter(child => this.toggles.some(toggle => within(toggle, child)));
-        }
+            return children(this.$el).filter((child) =>
+                this.toggles.some((toggle) => within(toggle, child))
+            );
+        },
 
+        swipeTarget() {
+            return this.connects;
+        },
+    },
+
+    connected() {
+        this.lazyload(this.$el, this.connects);
+
+        // check for connects
+        ready(() => this.$emit());
     },
 
     events: [
-
         {
-
             name: 'click',
 
             delegate() {
@@ -84,15 +104,14 @@ export default {
             handler(e) {
                 e.preventDefault();
                 this.show(e.current);
-            }
-
+            },
         },
 
         {
             name: 'click',
 
             el() {
-                return this.connects;
+                return this.connects.concat(this.itemNav ? queryAll(this.itemNav, this.$el) : []);
             },
 
             delegate() {
@@ -102,7 +121,7 @@ export default {
             handler(e) {
                 e.preventDefault();
                 this.show(data(e.current, this.attrItem));
-            }
+            },
         },
 
         {
@@ -116,45 +135,35 @@ export default {
                 return this.connects;
             },
 
-            handler({type}) {
+            handler({ type }) {
                 this.show(endsWith(type, 'Left') ? 'next' : 'previous');
-            }
-        }
-
+            },
+        },
     ],
 
     methods: {
-
         index() {
-            return findIndex(this.children, el => hasClass(el, this.cls));
+            return findIndex(this.children, (el) => hasClass(el, this.cls));
         },
 
         show(item) {
-
             const prev = this.index();
-            const next = getIndex(
-                this.children[getIndex(item, this.toggles, prev)],
-                children(this.$el)
-            );
-
-            if (prev === next) {
-                return;
-            }
-
-            this.children.forEach((child, i) => {
-                toggleClass(child, this.cls, next === i);
-                attr(this.toggles[i], 'aria-expanded', next === i);
+            const next = getIndex(item, this.toggles, prev);
+            const active = getIndex(this.children[next], children(this.$el));
+            children(this.$el).forEach((child, i) => {
+                toggleClass(child, this.cls, active === i);
+                attr(this.toggles[i], 'aria-expanded', active === i);
             });
 
-            this.connects.forEach(({children}) =>
-                this.toggleElement(toNodes(children).filter(child =>
-                    hasClass(child, this.cls)
-                ), false, prev >= 0).then(() =>
-                    this.toggleElement(children[next], true, prev >= 0)
-                )
-            );
-        }
-
-    }
-
+            const animate = prev >= 0 && prev !== next;
+            this.connects.forEach(async ({ children }) => {
+                await this.toggleElement(
+                    toNodes(children).filter((child) => hasClass(child, this.cls)),
+                    false,
+                    animate
+                );
+                await this.toggleElement(children[active], true, animate);
+            });
+        },
+    },
 };

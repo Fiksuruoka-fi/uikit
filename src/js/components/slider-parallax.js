@@ -1,24 +1,22 @@
 import Parallax from '../mixin/parallax';
-import {css, endsWith, fastdom, noop, query, Transition} from 'uikit-util';
+import { css, endsWith, fastdom, noop, query, Transition } from 'uikit-util';
 
 export default {
-
     mixins: [Parallax],
 
     data: {
-        selItem: '!li'
+        selItem: '!li',
     },
 
-    computed: {
+    beforeConnect() {
+        this.item = query(this.selItem, this.$el);
+    },
 
-        item({selItem}, $el) {
-            return query(selItem, $el);
-        }
-
+    disconnected() {
+        this.item = null;
     },
 
     events: [
-
         {
             name: 'itemin itemout',
 
@@ -28,18 +26,16 @@ export default {
                 return this.item;
             },
 
-            handler({type, detail: {percent, duration, timing, dir}}) {
-
+            handler({ type, detail: { percent, duration, timing, dir } }) {
                 fastdom.read(() => {
                     const propsFrom = this.getCss(getCurrentPercent(type, dir, percent));
-                    const propsTo = this.getCss(isIn(type) ? .5 : dir > 0 ? 1 : 0);
+                    const propsTo = this.getCss(isIn(type) ? 0.5 : dir > 0 ? 1 : 0);
                     fastdom.write(() => {
                         css(this.$el, propsFrom);
                         Transition.start(this.$el, propsTo, duration, timing).catch(noop);
                     });
                 });
-
-            }
+            },
         },
 
         {
@@ -53,8 +49,7 @@ export default {
 
             handler() {
                 Transition.cancel(this.$el);
-            }
-
+            },
         },
 
         {
@@ -66,16 +61,14 @@ export default {
                 return this.item;
             },
 
-            handler({type, detail: {percent, dir}}) {
+            handler({ type, detail: { percent, dir } }) {
                 fastdom.read(() => {
                     const props = this.getCss(getCurrentPercent(type, dir, percent));
                     fastdom.write(() => css(this.$el, props));
                 });
-            }
-        }
-
-    ]
-
+            },
+        },
+    ],
 };
 
 function isIn(type) {
@@ -83,14 +76,7 @@ function isIn(type) {
 }
 
 function getCurrentPercent(type, dir, percent) {
-
     percent /= 2;
 
-    return !isIn(type)
-        ? dir < 0
-            ? percent
-            : 1 - percent
-        : dir < 0
-            ? 1 - percent
-            : percent;
+    return isIn(type) ^ (dir < 0) ? percent : 1 - percent;
 }

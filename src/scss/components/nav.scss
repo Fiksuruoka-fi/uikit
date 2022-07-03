@@ -5,6 +5,7 @@
 //
 // Sub-objects:     `uk-nav-header`
 //                  `uk-nav-divider`
+//                  `uk-nav-subtitle`
 //                  `uk-nav-sub`
 //
 // Modifiers:       `uk-nav-parent-icon`
@@ -48,6 +49,7 @@ $nav-divider-margin-horizontal:                  0 !default;
 $nav-default-item-color:                         $global-muted-color !default;
 $nav-default-item-hover-color:                   $global-color !default;
 $nav-default-item-active-color:                  $global-emphasis-color !default;
+$nav-default-subtitle-font-size:                 $global-small-font-size !default;
 $nav-default-header-color:                       $global-emphasis-color !default;
 $nav-default-divider-border-width:               $global-border-width !default;
 $nav-default-divider-border:                     $global-border !default;
@@ -60,6 +62,7 @@ $nav-primary-item-line-height:                   $global-line-height !default;
 $nav-primary-item-color:                         $global-muted-color !default;
 $nav-primary-item-hover-color:                   $global-color !default;
 $nav-primary-item-active-color:                  $global-emphasis-color !default;
+$nav-primary-subtitle-font-size:                 $global-medium-font-size !default;
 $nav-primary-header-color:                       $global-emphasis-color !default;
 $nav-primary-divider-border-width:               $global-border-width !default;
 $nav-primary-divider-border:                     $global-border !default;
@@ -94,7 +97,6 @@ $internal-nav-parent-open-image: "data:image/svg+xml;charset=UTF-8,%3Csvg%20widt
 * 1. Center content vertically, e.g. an icon
 * 2. Imitate white space gap when using flexbox
 * 3. Reset link
-* 4. Space is allocated solely based on content dimensions: 0 0 auto
  */
 
 .uk-nav li > a {
@@ -106,15 +108,6 @@ $internal-nav-parent-open-image: "data:image/svg+xml;charset=UTF-8,%3Csvg%20widt
     /* 3*/
     text-decoration: none;
 }
-
-/* 4 */
-.uk-nav li > a > * { flex: none; }
-
-/*
- * Remove default focus style
- */
-
-.uk-nav li > a:focus { outline: none; }
 
 /*
  * Items
@@ -183,7 +176,7 @@ ul.uk-nav-sub {
 /* Divider
  ========================================================================== */
 
-.uk-nav >.uk-nav-divider {
+.uk-nav .uk-nav-divider {
     margin: $nav-divider-margin-vertical $nav-divider-margin-horizontal;
     @if(mixin-exists(hook-nav-divider)) {@include hook-nav-divider();}
 }
@@ -205,9 +198,8 @@ ul.uk-nav-sub {
     @if(mixin-exists(hook-nav-default-item)) {@include hook-nav-default-item();}
 }
 
-/* Hover + Focus */
-.uk-nav-default > li > a:hover,
-.uk-nav-default > li > a:focus {
+/* Hover */
+.uk-nav-default > li > a:hover {
     color: $nav-default-item-hover-color;
     @if(mixin-exists(hook-nav-default-item-hover)) {@include hook-nav-default-item-hover();}
 }
@@ -216,6 +208,15 @@ ul.uk-nav-sub {
 .uk-nav-default > li.uk-active > a {
     color: $nav-default-item-active-color;
     @if(mixin-exists(hook-nav-default-item-active)) {@include hook-nav-default-item-active();}
+}
+
+/*
+ * Subtitle
+ */
+
+.uk-nav-default .uk-nav-subtitle {
+    font-size: $nav-default-subtitle-font-size;
+    @if(mixin-exists(hook-nav-default-subtitle)) {@include hook-nav-default-subtitle();}
 }
 
 /*
@@ -242,8 +243,7 @@ ul.uk-nav-sub {
 
 .uk-nav-default .uk-nav-sub a { color: $nav-default-sublist-item-color; }
 
-.uk-nav-default .uk-nav-sub a:hover,
-.uk-nav-default .uk-nav-sub a:focus { color: $nav-default-sublist-item-hover-color; }
+.uk-nav-default .uk-nav-sub a:hover { color: $nav-default-sublist-item-hover-color; }
 
 .uk-nav-default .uk-nav-sub li.uk-active > a { color: $nav-default-sublist-item-active-color; }
 
@@ -266,9 +266,8 @@ ul.uk-nav-sub {
     @if(mixin-exists(hook-nav-primary-item)) {@include hook-nav-primary-item();}
 }
 
-/* Hover + Focus */
-.uk-nav-primary > li > a:hover,
-.uk-nav-primary > li > a:focus {
+/* Hover */
+.uk-nav-primary > li > a:hover {
     color: $nav-primary-item-hover-color;
     @if(mixin-exists(hook-nav-primary-item-hover)) {@include hook-nav-primary-item-hover();}
 }
@@ -277,6 +276,15 @@ ul.uk-nav-sub {
 .uk-nav-primary > li.uk-active > a {
     color: $nav-primary-item-active-color;
     @if(mixin-exists(hook-nav-primary-item-active)) {@include hook-nav-primary-item-active();}
+}
+
+/*
+ * Subtitle
+ */
+
+ .uk-nav-primary .uk-nav-subtitle {
+    font-size: $nav-primary-subtitle-font-size;
+    @if(mixin-exists(hook-nav-primary-subtitle)) {@include hook-nav-primary-subtitle();}
 }
 
 /*
@@ -303,8 +311,7 @@ ul.uk-nav-sub {
 
 .uk-nav-primary .uk-nav-sub a { color: $nav-primary-sublist-item-color; }
 
-.uk-nav-primary .uk-nav-sub a:hover,
-.uk-nav-primary .uk-nav-sub a:focus { color: $nav-primary-sublist-item-hover-color; }
+.uk-nav-primary .uk-nav-sub a:hover { color: $nav-primary-sublist-item-hover-color; }
 
 .uk-nav-primary .uk-nav-sub li.uk-active > a { color: $nav-primary-sublist-item-active-color; }
 
@@ -354,12 +361,14 @@ ul.uk-nav-sub {
 // @mixin hook-nav-default-item(){}
 // @mixin hook-nav-default-item-hover(){}
 // @mixin hook-nav-default-item-active(){}
+// @mixin hook-nav-default-subtitle(){}
 // @mixin hook-nav-default-header(){}
 // @mixin hook-nav-default-divider(){}
 // @mixin hook-nav-primary(){}
 // @mixin hook-nav-primary-item(){}
 // @mixin hook-nav-primary-item-hover(){}
 // @mixin hook-nav-primary-item-active(){}
+// @mixin hook-nav-primary-subtitle(){}
 // @mixin hook-nav-primary-header(){}
 // @mixin hook-nav-primary-divider(){}
 // @mixin hook-nav-dividers(){}

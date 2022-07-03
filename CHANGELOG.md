@@ -1,11 +1,439 @@
 # Changelog
 
+## 3.14.3 (May 27, 2022)
+
+### Fixed
+
+- Fix compatibility with iOS < 14
+- Fix regression in Parallax component
+
+## 3.14.2 (May 27, 2022)
+
+### Fixed
+
+- Fix logo image not working with text align in Utility component
+- Fix Scroll component on iOS 12
+- Fix offset calculation in Drop component
+- Fix `-justify` positioning in Drop component
+- Fix Dropbar handles resizing Drop components
+- Fix Toggle component in `mode:media` default prevents click event
+- Fix Toggle component not default preventing touch click on anchor with closed target
+- Fix Parallax component background image positioning
+- Make content clickable for sticky cover and reveal effects
+- Revert: Height Viewport component sets `uk-height-viewport` class to reduce initial layout shifts
+
+## 3.14.1 (May 3, 2022)
+
+### Added
+
+- Add `box-shadow` to `toggleHeight()` hide properties
+- Add adaptive velocity to Alert and Accordion components
+ 
+### Changed
+
+- Set `transition` option to `ease` by default in Togglable mixin
+
+### Fixed
+
+- Fix toggling accordion item while transition is in progress
+- Fix Drop positioning with `boundaryAlign: true`
+- Fix Scrollspy component not triggering in some cases
+- Fix Slider component showing wrong initial index
+
+## 3.14.0 (April 27, 2022)
+
+### Added
+
+- Add position shifting to Drop and Dropdown components
+- Add axis flipping if overflowing on both sides to Drop and Dropdown components
+- Add `max-width` to prevent overflowing the viewport to Drop and Dropdown components
+- Add `display` option to Drop and Dropdown components
+- Add support for negative `start` value in Sticky component
+- Add `overflow-flip` option to Sticky component
+- Add navbar justify to Navbar component
+- Add subtitle classes to Nav, Dropdown and Navbar components
+- Add support for `vw`,`vh`,`%` and `px` units to scale property in Parallax component
+- Add resize horizontal class to Utility component
+
+### Changed
+
+- Rename `top` and `bottom` options to `start` and `end` in Sticky component
+- Allow text to wrap into the next line for navs in Dropdown component
+
+### Removed
+
+- Remove `position: auto` option in Sticky component, use `overflow-flip` option instead
+- Remove `overflow-x: hidden` on html element, while horizontal animation is active
+
+### Fixed
+
+- Fix dropbar dropdown alignment if boundary-align is true
+- Fix viewport helper functions take border into account
+- Fix Sticky component responsiveness on window resize
+- Fix Cover component correctly applies ratio if only one of width/height is provided
+- Fix responsiveness in Grid, Margin and Height Match component
+
+## 3.13.10 (April 20, 2022)
+
+### Fixed
+
+- Revert: Fix reposition Drop on scroll
+- Fix Toggle component does not `defaultPrevent()` click on anchor with touch gesture
+- Fix Sticky component uses wrong offsetParent while it's positioned fixed
+
+## 3.13.9 (April 20, 2022)
+
+### Fixed
+
+- Fix release
+
+## 3.13.8 (April 20, 2022)
+
+### Changed
+
+- Scrollspy component uses IntersectionObserver instead of scroll/resize events
+
+### Fixed
+
+- Fix Drop/Dropdowns component does not close on clicked `.uk-(drop|dropdown)-close` selector
+- Fix Accordion initially not closed
+- Fix Height Match component not matching correctly
+- Fix Margin component does not correctly listen for resize
+- Fix regression in Sticky component affecting height of placeholder
+- Fix Toggle not toggling after re-entering button with mouse before drop has closed itself
+- Fix reposition Drop on scroll
+
+## 3.13.7 (April 1, 2022)
+
+### Fixed
+
+- Fix regression in Drop component not updating its width if alignment is set to `justify`
+- Fix regression in Height Match component not updating its height when resized
+
+## 3.13.6 (April 1, 2022)
+
+### Removed
+
+- Image component no longer sets a `background-size` for elements with `background-size` set to `auto`
+
+### Fixed
+
+- Fix Position component
+- Fix regression in Upload component with `multiple` option disabled
+- Fix regression in Height Viewport component with `expand` option enabled
+- Fix regression in Slider/Slideshow Parallax
+
+## 3.13.5 (March 28, 2022)
+
+### Fixed
+
+- Fix regression in Drop component's `offset` option
+- Fix initial values for `@navbar-dropdown-margin` and `@navbar-dropdown-dropbar-margin-top`
+
+## 3.13.4 (March 25, 2022)
+
+### Fixed
+
+- Fix Tooltip margin
+
+## 3.13.3 (March 25, 2022)
+
+### Fixed
+
+- Fix importing UIkit in Next.js
+
+## 3.13.2 (March 25, 2022)
+
+### Changed
+
+- Use custom property for direction offset in components based on Position mixin
+- Add max-width to drops in Drop, Dropdown and Navbar components
+
+### Removed
+
+- Remove dropbar push mode from Navbar component
+
+### Fixed
+
+- Fix dropbar dropdown alignment
+- Fix dropbar dropdown top margin flickering
+- Fix Switcher component with disabled toggles
+- Fix responsiveness in Responsive component
+- Fix video autoplay
+- Fix importing UIkit in Next.js
+
+## 3.13.1 (March 18, 2022)
+
+### Fixed
+
+- Fix Switcher component with disabled toggles
+- Fix regression in Cover component
+
+## 3.13.0 (March 18, 2022)
+
+### Added
+
+- Add support for `<img>` element to icon image class in Icon component
+
+### Changed
+
+- Improve performance for large sites
+- Custom components have to listen for `resize` and `scroll` updates manually
+
+### Removed
+
+- Remove Edge Legacy (EdgeHTML) support
+- Remove Safari fallback for `focus-visible`
+- Remove deprecated Gif component
+- Remove option `width-element` in Sticky component
+
+### Fixed
+
+- Fix list bullet regression in List component
+- Fix regression in Modal component with `uk-modal-dialog` class
+- Fix Sticky component notices change in its offset parent's position
+- Fix Scrollspy component does not apply animation classes on hide
+
+## 3.12.2 (March 14, 2022)
+
+### Fixed
+
+- Fix regression in Slider/Slideshow touch gestures
+
+## 3.12.1 (March 14, 2022)
+
+### Fixed
+
+- Fix List component used with flex utility classes
+
+## 3.12.0 (March 14, 2022)
+
+### Added
+
+- Add support for `<picture>` element to Image component
+- Add `sources` option to emulate `<picture>` element for background images to Image component
+- Add `loading` option to avoid lazy loading background images in first visible viewport to Image component
+- Add support for `loading="lazy"` attribute to SVG component
+- Add `position` option with `top`, `bottom` and `auto` values to Sticky component
+- Add support for basic math operands in `offset` option of Sticky component
+- Add animation stop positions to Parallax component
+- Add object fit and position classes to Utility component
+- Add height viewport classes to Height component
+
+### Changed
+
+- Image elements need `width` and `height` attributes to prevent layout shifts
+- Image component no longer relies on session storage to check for cached images to immediately show an image
+- Slider and Switcher remove native `loading="lazy"` attribute from adjacent slides
+- Accordion, Drop, Switcher and Toggle remove native `loading="lazy"` attribute from their children when entering the viewport
+- Improve sticky behavior if sticky content is larger than the viewport
+- Sticky component's `bottom` option checks for bottom padding if sticky element is within referenced element
+- Height Viewport component sets `uk-height-viewport` class to reduce initial layout shifts
+
+### Deprecated
+
+- Deprecate `uk-img` for `<img>` element: Use native `loading="lazy"` attribute instead
+
+### Removed
+
+- Remove IE11 support
+- Removed `data-width` and `data-height` for `<img>` element from Image component. Use native attributes instead.
+
+### Fixed
+
+- Fix infinite sliding in Slider component with equally sized slides
+- Fix Slider component sets calculation
+- Fix dropdowns not closing in Navbar component when hovering dropbar and navigation with keyboard
+- Fix dropdown no longer closes if pointer is still moving towards it
+- Fix `fadein` not transformed correctly to `fade-in` in scss build
+- Fix Sticky component setting wrong margin for placeholder
+- Fix Sticky placeholder sets height with fraction
+- Fix Sticky component does not animate in if scroll position equals top offset
+- Fix Sticky component prevents transition on `selTarget` if forced to hide for recalculation
+- Fix Parallax component initial jump in background image
+
+## 3.11.1 (February 7, 2022)
+
+### Fixed
+
+- Fix scoping css to exclude `:root` selector
+- Fix `toPx()` correctly uses offsetHeight/Width
+
+## 3.11.0 (February 7, 2022)
+
+### Added
+
+- Add `start` and `end` options to Parallax component
+- Add negative z-index utility class to Position component
+- Add Sticky Parallax test
+
+### Deprecated
+
+- Deprecate `viewport` option in Parallax component: Use `end` option instead
+
+### Fixed
+
+- Use same position context when uk-sticky sticks or not
+- Fix interdependent computed properties being evaluated too often
+- Fix `getIndex()` returns `-1` instead of `NaN` if called with empty elements parameter
+- Fix Scrollspy component no longer sets class `false`
+- Fix Parallax component no longer rounds values to two digits after comma
+- Fix Parallax component running backwards with 'viewport' option set to a value < 1
+- Fix Parallax component easing option for values < -1 || > 1
+
+## 3.10.1 (January 19, 2022)
+
+### Fixed
+
+- Fix vertical divider width in Divider component
+- Fix usage of `data-` prefix for Cover and Responsive component
+- Fix pointer events for iframes in Cover component
+- Fix Slideshow component no longer throws if items list does not exist
+- Fix space key no longer triggers Toggle on `<input>` element
+
+## 3.10.0 (January 12, 2022)
+
+### Added
+
+- Add intrinsic widths to Width component
+- Add 'aria-haspopup' attribute to Drop component's toggle
+- Add padding variable to search icon in Search component
+- Add position bottom variable to box-shadow bottom in Utility component
+
+### Changed
+
+- Disable Sticky component if it's element is higher than viewport
+
+### Fixed
+
+- Fix initial iframe width for `uk-responsive` which caused an expanded viewport on iOS devices
+- Fix link toggle style if not hovered
+- Fix compiling Slideshow css in rtl mode
+- Fix Sortable component no longer scrolls `overflow: hidden` containers
+- Fix 'yarn watch' not watching changes in less files
+- Fix `domPath()` for elements within forms that include inputs with name 'id'
+
+## 3.9.4 (November 25, 2021)
+
+### Fixed
+
+- Fix Sticky position when bottom option is used
+
+## 3.9.3 (November 18, 2021)
+
+### Fixed
+
+- Fix logo image alignment if logo line-height is larger than the image
+
+## 3.9.2 (November 11, 2021)
+
+### Fixed
+
+- Fix build scripts for Windows users
+- Fix css in Leader component
+- Fix division deprecation warnings in Sass source
+
+## 3.9.1 (November 10, 2021)
+
+### Changed
+
+- Update Less mixin calls to use parentheses
+
+## 3.9.0 (November 10, 2021)
+
+### Changed
+
+- Upgrade Less to version 4
+
+## 3.8.1 (November 5, 2021)
+
+### Added
+
+- Add Less variables for outline style
+
+### Changed
+
+- Make padding large a little bigger on small devices
+- Change logo color to 'emphasis'
+
+### Fixed
+
+- Fix scrollIntoView function with offset argument provided
+
+## 3.8.0 (October 28, 2021)
+
+### Changed
+
+- Refactor focus styles to use `focus-visible` in all components
+- Use custom properties in Position component
+- Make transition classes work with position or cover classes on the same element
+- Refactor animation component
+
+### Changed
+
+- Improve sticky performance when bottom option is used
+
+### Fixed
+
+- Revert setting focus to modal/offcanvas toggle after close
+
+## 3.7.6 (October 8, 2021)
+
+### Fixed
+
+- Fix Drop closing if clicked within through touch event
+- Fix Slider not animating slides if slide wider than slide container
+
+## 3.7.5 (October 5, 2021)
+
+### Change
+
+- Improve Cover component performance if applied to none video
+
+### Fixed
+
+- Fix toggle behavior in Toggle component
+- Fix Toggle component no longer sets tabindex in media mode
+
+## 3.7.4 (September 23, 2021)
+
+### Added
+
+- Add itemNav option to Switcher component
+
+### Changed
+
+- Focus modal/offcanvas upon opening
+
+### Fixed
+
+- Fix regression in Toggle component
+- Fix keyboard navigation in Navbar component
+- Fix navbar toggle style and navbar item inverse style if dropdown is open
+
+## 3.7.3 (September 9, 2021)
+
+### Added
+
+- Add tile hover hooks
+
+### Fixed
+
+- Fix toggle behavior in Toggle component
+- Fix navbar item style if dropdown is open and container option is used
+
+## 3.7.2 (August 6, 2021)
+
+### Fixed
+
+- Fix text alignment if tabs are left or right aligned in Tab component
+
 ## 3.7.1 (July 15, 2021)
 
 ### Fixed
 
 - Fix animation classes only partially being removed in Scrollspy component
-- Fix scrollIntoView did not return Promise if element is hidden 
+- Fix scrollIntoView did not return Promise if element is hidden
 
 ## 3.7.0 (June 29, 2021)
 
@@ -15,7 +443,7 @@
 - Add width variable to range thumb in to Form Range component
 - Add Bag icon
 
-### Change
+### Changed
 
 - Change default search width and horizontal padding in Search component
 - Change badge width and font size in Badge component
@@ -67,7 +495,7 @@
 
 ## 3.6.20 (April 22, 2021)
 
-### Change
+### Changed
 
 - Toggle component in hover mode toggles on focus and blur
 
@@ -77,21 +505,21 @@
 
 ## 3.6.19 (April 7, 2021)
 
-### Change
+### Changed
 
 - Update card badge style
 
 ### Fixed
 
 - Fix animation set to `false` in Sortable component
-- Fix Tooltip on elements with class 'uk-active' applied
+- Fix Tooltip on elements with class `uk-active` applied
 - Fix Slider parallax states
 
 ## 3.6.18 (March 12, 2021)
 
 ### Added
 
-- Add Discord, Twitch and Tiktok icons
+- Add Discord, Twitch and TikTok icons
 
 ### Removed
 
@@ -99,13 +527,13 @@
 
 ### Fixed
 
-- Fix filter inital state
+- Fix filter initial state
 
 ## 3.6.17 (February 25, 2021)
 
 ### Added
 
-- Add background-size modifier for width and height to Background component 
+- Add background-size modifier for width and height to Background component
 
 ### Fixed
 
@@ -113,7 +541,7 @@
 
 ## 3.6.16 (February 5, 2021)
 
-### Change
+### Changed
 
 - Make multiple select resizable
 
@@ -152,7 +580,7 @@
 
 - Fix IE11 compatibility
 - Fix changing ratio does not correctly apply width and height in SVG component
-- Fix issues from hiding an already hidden Modal 
+- Fix issues from hiding an already hidden Modal
 
 ## 3.6.11 (January 14, 2021)
 
@@ -178,7 +606,7 @@
 
 - Fix component update handling
 - Fix Tooltip position
-- Fix Tooltip component applied to button elements in iOS
+- Fix Tooltip component applied to `<button>` element in iOS
 - Fix regression in Switcher component
 
 ## 3.6.8 (January 5, 2021)
@@ -256,7 +684,7 @@
 ### Fixed
 
 - Fix 'aria-expanded' value on toggles
-- Fix responsivness in Switcher component
+- Fix responsiveness in Switcher component
 
 ## 3.5.17 (December 16, 2020)
 
@@ -301,7 +729,7 @@
 
 ### Changed
 
-- Sorting starts after traversing half the items height/width in Sortable component
+- Sorting starts after traversing half the item's height/width in Sortable component
 
 ## 3.5.12 (December 7, 2020)
 
@@ -370,7 +798,7 @@
 
 ### Changed
 
-- Sticky component uses window.Date instead of window.performance
+- Sticky component uses 'window.Date' instead of 'window.performance'
 - Sticky component with sticky-on-up no longer hides when Dropdown shows
 
 ### Fixed
@@ -386,7 +814,7 @@
 ### Added
 
 - Add list marker utility support for WebKit
-- Add `uk-text-default` to Text component 
+- Add `uk-text-default` to Text component
 - Add multiple targets to Filter component
 
 ### Fixed
@@ -395,7 +823,7 @@
 - Fix empty slider throws exception
 - Fix pointer events ignored on SVGs in Sortable component
 - Fix Grid component divider rendering
-- Fix `<select>` closes Drop component in hover mode in Firefox 
+- Fix `<select>` closes Drop component in hover mode in Firefox
 
 ## 3.5.4 (June 12, 2020)
 
@@ -406,7 +834,7 @@
 ### Fixed
 
 - Fix prop observer for dataSrc option in Image component
-- Fix ajax function supports responseType 'json' in IE 11 
+- Fix ajax function supports responseType 'json' in IE 11
 - Fix Accordion component with `multiple: true` and `collapsible: false`
 
 ## 3.5.3 (May 29, 2020)
@@ -459,7 +887,7 @@
 
 ### Added
 
-- Add inBrowser check to enable server-side rendering 
+- Add inBrowser check to enable server-side rendering
 
 ### Fixed
 
@@ -519,7 +947,7 @@
 
 ### Changed
 
-- Change default dimensions to 1920x1080 for YouTube in Lightbox component 
+- Change default dimensions to 1920x1080 for YouTube in Lightbox component
 
 ### Fixed
 
@@ -537,7 +965,7 @@
 
 - Fix Height Match component not matching empty elements
 - Fix Scrollspy Nav component activating wrong elements
-- Fix Modal/Drop close on bgClick behaviour 
+- Fix Modal/Drop close on bgClick behaviour
 - Fix `z-index` on Modal stacked dialogs
 
 ## 3.3.6 (March 12, 2020)
@@ -657,13 +1085,13 @@
 
 ### Added
 
-- Parallax, Scroll, Scrollspy Nav components work inside of scrollable container
+- Parallax, Scroll, Scrollspy Nav components work inside scrollable container
 - Expose `scrollIntoView` utility function
 
 ### Fixed
 
 - Fix scrolling containers while dragging in Sortable component
-- Fix show/hide behaviour in Drop component 
+- Fix show/hide behaviour in Drop component
 - Fix Accordion component will scroll title into view if needed
 - Fix component initialization without element
 
@@ -727,7 +1155,7 @@
 ### Fixed
 
 - Fix Slideshow invisible after switching tabs in Switcher
-- Fix lazy loading images in Img component in UC Browser
+- Fix lazy loading images in Image component in UC Browser
 - Fix opening Offcanvas/Modal through buttons
 
 ## 3.1.8 (August 29, 2019)
@@ -754,7 +1182,7 @@
 
 ### Changed
 
-- By default the Offcanvas `container` option is `false` now
+- By default, the Offcanvas `container` option is `false` now
 - The `focusable` attribute on SVG/Icon component makes SVG focusable in IE
 
 ### Fixed
@@ -763,7 +1191,7 @@
 - Fix swipe gestures in Switcher component (Android)
 - Ensure at most one Height Viewport component set to `expand` is active
 - Height Viewport component no longer calculates its height if invisible
-- Fix using Sortable in scrolling container 
+- Fix using Sortable in scrolling container
 - Fix lazy loading images if parent element is fully clipped
 - Fix clicking Slideshow with `draggable: false` no longer pauses autoplay
 - Fix toggling modal while transition is in progress
@@ -807,7 +1235,7 @@
 - Fix selector engine
 - Fix CSS selector in Lightbox component
 - Fix Drop not closing when Toggle component is clicked
- 
+
 ## 3.1.3 (April 23, 2019)
 
 ### Fixed
@@ -889,7 +1317,7 @@
 
 - Image Component uses IntersectionObserver now
 
-## Removed
+### Removed
 
 - Remove `isReady` function
 - Form Custom component no longer sets `uk-hover` and `uk-focus` classes
@@ -897,8 +1325,8 @@
 ### Fixed
 
 - Fix touch event detection
-- Fix background images are shown too large on retina displays in Img component
-- Fix correctly calculate offsetLeft in Img component
+- Fix background images are shown too large on retina displays in Image component
+- Fix correctly calculate offsetLeft in Image component
 - Fix autofocus elements not blurring within Toggable on hide
 
 ## 3.0.2 (January 15, 2019)
@@ -907,7 +1335,7 @@
 
 - Fix offcanvas overlay transition
 - Fix active state in Switcher component
-- Fix background images on displays with higher devicePixelRatio in Img component
+- Fix background images on displays with higher devicePixelRatio in Image component
 
 ## 3.0.1 (January 14, 2019)
 
@@ -939,8 +1367,8 @@
 
 ### Fixed
 
-- Fix visible toggle and its child elments not being focusable through keyboard navigation
-- Fix Img component correctly escapes urls on background images
+- Fix visible toggle and its child elements not being focusable through keyboard navigation
+- Fix Image component correctly escapes urls on background images
 
 ## 3.0.0 rc 26 (January 3, 2019)
 
@@ -959,8 +1387,8 @@
 - Fix `flex bug` mixin (IE 11)
 - Fix properly resolving css custom properties in scss
 - Fix order of variable assignments in scss
-- Fix background images are shown too large on retina displays in Img component
-- Fix lazy loading images in Img component in Safari
+- Fix background images are shown too large on retina displays in Image component
+- Fix lazy loading images in Image component in Safari
 - Limit positioned element to container width and margin in Position component
 
 ## 3.0.0 rc 25 (November 30, 2018)
@@ -1018,7 +1446,7 @@
 
 ### Added
 
-- Add print, reddit, mircrophone, file-text, file-pdf, chevron-double left and right icons
+- Add print, reddit, microphone, file-text, file-pdf, chevron-double left and right icons
 - Add text emphasis to Text component
 - Add `src` as primary option to SVG component
 
@@ -1048,7 +1476,7 @@
 
 ### Fixed
 
-- Fix preserve color not working if class is set on svg element in Icon component
+- Fix preserve color not working if class is set on `<svg>` element in Icon component
 - Fix inverse hover color for accordion title
 - Fix close color being overwritten from toolbar in Lightbox component
 - Fix Modal not hiding upon being destroyed
@@ -1084,7 +1512,7 @@
 ### Fixed
 
 - Fix `UIkit.mixin()`
-- Fix issue with list bullet in combination with multi column layouts
+- Fix issue with list bullet in combination with multi-column layouts
 - Allow for special characters in URI hash in Scroll Component
 - Height Match also sets a `height` in IE
 - Slideshow sets `min-height` instead of `height`
@@ -1292,7 +1720,7 @@
 
 ### Added
 
-- Add Img component to lazy load images
+- Add Image component to lazy load images
 - Add Filter component to filter and sort any kind of layout
 - Add `masonry` option to Grid component
 - Add inverse style for form icon
@@ -1405,12 +1833,12 @@
 
 ### Added
 
-- Add support to center elements outside of a container to Position component
+- Add support to center elements outside a container to Position component
 
 ### Changed
 
 - Add `uk-slider-container` class to clip the Slider component
-- Remove auto-clipping from Slider items. Use `uk-cover-container` instead.
+- Remove auto-clipping from Slider items. Use `uk-cover-container` instead
 
 ### Fixed
 
@@ -1455,7 +1883,7 @@
 
 ### Changed
 
-- IMPORTANT: Use `a` element instead of headings for the accordion title
+- IMPORTANT: Use `<a>` element instead of headings for the accordion title
 - Calling a component constructor with data on an already initialized component will reset the component
 - Dropbar no longer repositions Dropdowns in DOM upon opening
 
@@ -1556,7 +1984,7 @@
 - Fix slide animations stacking when tab is not focused in Slideshow component
 - Fix overlay not showing in Offcanvas component
 - Fix Slideshow Parallax in Slideshow component for IE11
-- Fix default border-radius for button elements in Chrome 62.
+- Fix default border-radius for `<button>` element in Chrome 62.
 
 ## 3.0.0 beta 31 (October 20, 2017)
 
@@ -1665,7 +2093,7 @@
 
 - Offcanvas will keep scroll position if anchor link was clicked
 - Fix margin modifier in Position component for IE11
-- Fix divider-small text alignment for `hr` elements Edge and IE
+- Fix divider-small text alignment for `<hr>` element Edge and IE
 - Fix setting the ratio of Spinner component
 - Fix event handling in Sortable component
 - Fix grid calculation (Firefox)
@@ -1701,7 +2129,7 @@
 
 ### Changed
 
-- Make Icon component work with button elements
+- Make Icon component work with `<button>` element
 
 ### Fixed
 
@@ -1726,7 +2154,7 @@
 
 ### Changed
 
-- IMPORTANT: Move LESS/Sass imports into one file. Use `components/_import.less`
+- IMPORTANT: Move Less/Sass imports into one file. Use `components/_import.less`
 - IMPORTANT: Renamed `transition` option to `easing` in Scroll component
 - Improve flip behaviour in Drop component
 - Improve `class` handling
@@ -1812,7 +2240,7 @@
 
 ### Changed
 
-- IMPORTANT: Offcanvas requires to wrap page in extra div
+- IMPORTANT: Offcanvas requires wrapping page in extra div
 - Refactored Offcanvas component
 - Update Instagram, Tumblr and Vimeo icons
 - Component Constructor initializes multiple components at once
@@ -1900,7 +2328,7 @@
 
 ### Fixed
 
-- Fix npm not watching LESS
+- Fix npm not watching Less files
 - Modal no longer closes immediately when toggled from custom `click` handler
 - Fix Accordion component
 - Fix container for Tooltip component
@@ -1997,7 +2425,7 @@
 
 ### Changed
 
-- LESS no longer uses component attribute selectors
+- Less no longer uses component attribute selectors
 - Accordion close and open icons using variables
 
 ### Removed
@@ -2031,7 +2459,7 @@
 
 ### Changed
 
-- UIkit observes `body` element too now
+- UIkit observes `<body>` element too now
 - Performance improvements
 
 ### Fixed
@@ -2077,7 +2505,7 @@
 
 ### Fixed
 
-- Fix Icon component on canvas elements (Safari)
+- Fix Icon component on `<canvas>` elements (Safari)
 
 ## 3.0.0 beta 1 (January 09, 2017)
 

@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Navbar - UIkit tests</title>
         <script src="js/test.js"></script>
-        <style type="text/css">
+        <style>
 
             .test {
                 display: block;
@@ -26,7 +26,7 @@
             <h1>Navbar</h1>
 
             <div uk-grid>
-                <div class="uk-width-2-3@m">
+                <div class="uk-width-1-2@m">
 
                     <nav class="uk-navbar-container uk-margin" uk-navbar>
                         <div class="uk-navbar-left">
@@ -103,7 +103,7 @@
                     <h2>Transparent</h2>
 
                     <div class="uk-margin uk-position-relative uk-light">
-                        <canvas class="uk-background-cover" style="background-image: url('images/dark.jpg')" width="1000" height="200"></canvas>
+                        <canvas class="uk-background-cover" style="background-image: url('images/dark.jpg')" width="1000" height="300"></canvas>
                         <div class="uk-position-top">
                             <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
                                 <div class="uk-navbar-left">
@@ -144,7 +144,7 @@
                     </div>
 
                     <div class="uk-margin uk-position-relative uk-dark">
-                        <canvas class="uk-background-cover" style="background-image: url('images/light.jpg')" width="1000" height="200"></canvas>
+                        <canvas class="uk-background-cover" style="background-image: url('images/light.jpg')" width="1000" height="300"></canvas>
                         <div class="uk-position-top">
                             <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
                                 <div class="uk-navbar-left">
@@ -185,7 +185,7 @@
                     </div>
 
                 </div>
-                <div class="uk-width-1-3@m">
+                <div class="uk-width-1-4@m">
 
                     <div class="uk-navbar-dropdown test">
 
@@ -215,6 +215,20 @@
                             <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: thumbnails"></span> Item</a></li>
                             <li class="uk-nav-divider"></li>
                             <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: trash"></span> Item</a></li>
+                        </ul>
+
+                    </div>
+
+                </div>
+                <div class="uk-width-1-4@m">
+
+                    <div class="uk-navbar-dropdown test">
+
+                        <ul class="uk-nav uk-navbar-dropdown-nav">
+                            <li class="uk-active"><a href="#"><div>Active<div class="uk-nav-subtitle">Subtitle lorem ipsum dolor sit amet, consectetur adipiscing.</div></div></a></li>
+                            <li><a href="#"><div>Item<div class="uk-nav-subtitle">Subtitle lorem ipsum dolor sit amet, consectetur adipiscing.</div></div></a></li>
+                            <li><a href="#"><div>Item<div class="uk-nav-subtitle">Subtitle lorem ipsum dolor sit amet, consectetur adipiscing.</div></div></a></li>
+                            <li><a href="#"><div>Item<div class="uk-nav-subtitle">Subtitle lorem ipsum dolor sit amet, consectetur adipiscing.</div></div></a></li>
                         </ul>
 
                     </div>
@@ -376,7 +390,7 @@
                 </div>
             </nav>
 
-            <nav class="uk-navbar-container uk-margin" uk-navbar="mode:click">
+            <nav class="uk-navbar-container uk-margin" uk-navbar="mode: click">
                 <div class="uk-navbar-left">
 
                     <ul class="uk-navbar-nav">
@@ -528,7 +542,7 @@
                 </div>
             </nav>
 
-            <nav class="uk-navbar-container uk-margin" uk-navbar="align: center">
+            <nav class="uk-navbar-container uk-margin" uk-navbar="align: center; boundary: html">
                 <div class="uk-navbar-left">
 
                     <ul class="uk-navbar-nav">
@@ -1151,12 +1165,12 @@
 
             <div class="uk-margin">
 
-                <nav class="uk-navbar-container" uk-navbar="dropbar: true; dropbar-mode: push">
+                <nav class="uk-navbar-container" uk-navbar="dropbar: true">
                     <div class="uk-navbar-left">
 
                         <ul class="uk-navbar-nav">
                             <li>
-                                <a href="#">Push</a>
+                                <a href="#">Hover</a>
                                 <div class="uk-navbar-dropdown">
                                     <ul class="uk-nav uk-navbar-dropdown-nav">
                                         <li class="uk-active"><a href="#">Active</a></li>
@@ -1345,7 +1359,7 @@
                     <div class="uk-navbar-item">
                         <a class="uk-icon-button" href="#" uk-icon="icon: trash"></a>
                     </div>
-                    <div class="uk-navbar-item"><img src="images/photo.jpg" width="100" alt=""></div>
+                    <div class="uk-navbar-item"><img src="images/photo.jpg" width="100" height="67" alt=""></div>
                     <div class="uk-navbar-item">Search</div>
                     <div class="uk-navbar-item">
                         <form>
@@ -1386,33 +1400,25 @@
 
                     <nav class="uk-navbar uk-navbar-container uk-margin">
                         <div class="uk-navbar-left">
-                            <div>
-                                <a class="uk-navbar-item uk-logo" href="#">Logo</a>
-                                <div class="uk-navbar-dropdown" uk-drop="mode: click; cls-drop: uk-navbar-dropdown; boundary: !nav; flip: x">Dropdown</div>
-                            </div>
+                            <a class="uk-navbar-item uk-logo" href="#">Logo</a>
+                            <div class="uk-navbar-dropdown" uk-drop="mode: click; cls-drop: uk-navbar-dropdown; boundary: !nav; flip: x">Dropdown</div>
                         </div>
                         <div class="uk-navbar-right">
-                            <div>
-                                <a class="uk-navbar-toggle" href="#" uk-navbar-toggle-icon></a>
-                                <div class="uk-navbar-dropdown" uk-drop="mode: click; cls-drop: uk-navbar-dropdown; boundary: !nav; flip: x">Dropdown</div>
-                            </div>
+                            <a class="uk-navbar-toggle" href="#" uk-navbar-toggle-icon></a>
+                            <div class="uk-navbar-dropdown" uk-drop="mode: click; cls-drop: uk-navbar-dropdown; boundary: !nav; flip: x">Dropdown</div>
                         </div>
                     </nav>
 
                     <nav class="uk-navbar uk-navbar-container uk-margin">
                         <div class="uk-navbar-left">
-                            <div>
-                                <a class="uk-navbar-toggle" href="#">Menu</a>
-                                <div class="uk-navbar-dropdown" uk-drop="mode: click; cls-drop: uk-navbar-dropdown; boundary: !nav; flip: x">Dropdown</div>
-                            </div>
+                            <a class="uk-navbar-toggle" href="#">Menu</a>
+                            <div class="uk-navbar-dropdown" uk-drop="mode: click; cls-drop: uk-navbar-dropdown; boundary: !nav; flip: x">Dropdown</div>
                         </div>
                         <div class="uk-navbar-right">
-                            <div>
-                                <a class="uk-navbar-toggle" href="#">
-                                    <span class="uk-margin-small-right">Menu</span> <span uk-navbar-toggle-icon></span>
-                                </a>
-                                <div class="uk-navbar-dropdown" uk-drop="mode: click; cls-drop: uk-navbar-dropdown; boundary: !nav; flip: x">Dropdown</div>
-                            </div>
+                            <a class="uk-navbar-toggle" href="#">
+                                <span class="uk-margin-small-right">Menu</span> <span uk-navbar-toggle-icon></span>
+                            </a>
+                            <div class="uk-navbar-dropdown" uk-drop="mode: click; cls-drop: uk-navbar-dropdown; boundary: !nav; flip: x">Dropdown</div>
                         </div>
                     </nav>
 
@@ -1707,6 +1713,43 @@
                 </div>
             </nav>
 
+            <h2>Justify</h2>
+
+            <nav class="uk-navbar-container uk-margin">
+                <div class="uk-navbar-justify" uk-navbar>
+                    <div class="uk-navbar-left">
+
+                        <a class="uk-navbar-item uk-logo" href="#">Logo</a>
+
+                        <ul class="uk-navbar-nav">
+                            <li class="uk-active"><a href="#">Active</a></li>
+                            <li><a href="#">Parent</a></li>
+                            <li><a href="#">Item</a></li>
+                            <li><a href="#">Item</a></li>
+                        </ul>
+
+                    </div>
+                    <div class="uk-navbar-right">
+
+                        <ul class="uk-navbar-nav">
+                            <li><a href="#">Item</a></li>
+                        </ul>
+
+                        <div class="uk-navbar-item">
+                            <ul class="uk-grid-small" uk-grid>
+                                <li>
+                                    <a class="uk-icon-button" href="#" uk-icon="icon: trash"></a>
+                                </li>
+                                <li>
+                                    <a class="uk-icon-button" href="#" uk-icon="icon: trash"></a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </nav>
+
             <h2>Layouts</h2>
 
         </div>
@@ -1715,8 +1758,6 @@
             <div class="uk-container">
                 <div class="uk-navbar">
                     <div class="uk-navbar-left">
-
-                        <a class="uk-navbar-item uk-logo" href="#">Logo</a>
 
                         <ul class="uk-navbar-nav">
                             <li class="uk-active"><a href="#">Active</a></li>
@@ -1766,6 +1807,8 @@
                                 </li>
                             </ul>
                         </div>
+
+                        <a class="uk-navbar-toggle" uk-navbar-toggle-icon href="#"></a>
 
                     </div>
                 </div>
@@ -1792,19 +1835,7 @@
                     </div>
                     <div class="uk-navbar-right">
 
-                        <div class="uk-navbar-item">
-                            <ul class="uk-grid-small" uk-grid>
-                                <li>
-                                    <a class="uk-icon-button" href="#" uk-icon="icon: trash"></a>
-                                </li>
-                                <li>
-                                    <a class="uk-icon-button" href="#" uk-icon="icon: trash"></a>
-                                </li>
-                                <li>
-                                    <a class="uk-icon-button" href="#" uk-icon="icon: trash"></a>
-                                </li>
-                            </ul>
-                        </div>
+                        <a class="uk-navbar-toggle" uk-navbar-toggle-icon href="#"></a>
 
                     </div>
                 </div>
@@ -1855,19 +1886,7 @@
                             <li><a href="#">Item</a></li>
                         </ul>
 
-                        <div class="uk-navbar-item">
-                            <ul class="uk-grid-small" uk-grid>
-                                <li>
-                                    <a class="uk-icon-button" href="#" uk-icon="icon: trash"></a>
-                                </li>
-                                <li>
-                                    <a class="uk-icon-button" href="#" uk-icon="icon: trash"></a>
-                                </li>
-                                <li>
-                                    <a class="uk-icon-button" href="#" uk-icon="icon: trash"></a>
-                                </li>
-                            </ul>
-                        </div>
+                        <a class="uk-navbar-toggle" uk-navbar-toggle-icon href="#"></a>
 
                     </div>
                 </div>
@@ -1894,19 +1913,7 @@
                     </div>
                     <div class="uk-navbar-right">
 
-                        <div class="uk-navbar-item">
-                            <ul class="uk-grid-small" uk-grid>
-                                <li>
-                                    <a class="uk-icon-button" href="#" uk-icon="icon: trash"></a>
-                                </li>
-                                <li>
-                                    <a class="uk-icon-button" href="#" uk-icon="icon: trash"></a>
-                                </li>
-                                <li>
-                                    <a class="uk-icon-button" href="#" uk-icon="icon: trash"></a>
-                                </li>
-                            </ul>
-                        </div>
+                        <a class="uk-navbar-toggle" uk-navbar-toggle-icon href="#"></a>
 
                     </div>
                 </div>
@@ -1955,8 +1962,8 @@
                         <tr>
                             <td><code>boundary</code></td>
                             <td>CSS selector</td>
-                            <td>window</td>
-                            <td>Referenced element to keep Drop's visibility.</td>
+                            <td>true</td>
+                            <td>Referenced element to keep Drop's visibility. By default, it's the navbar component's element.</td>
                         </tr>
                         <tr>
                             <td><code>boundary-align</code></td>
@@ -1983,16 +1990,16 @@
                             <td>The dropbar selector. If true the dropbar will be inserted automatically.</td>
                         </tr>
                         <tr>
-                            <td><code>dropbar-mode</code></td>
-                            <td>slide | push</td>
-                            <td>slide</td>
-                            <td>The dropbar mode. (`push` mode is not supported within Sticky component)</td>
-                        </tr>
-                        <tr>
                             <td><code>duration</code></td>
                             <td>Number</td>
                             <td>200</td>
                             <td>The dropbar transition duration.</td>
+                        </tr>
+                        <tr>
+                            <td><code>container</code></td>
+                            <td>Boolean</td>
+                            <td>false</td>
+                            <td>Define a target container via a selector to specify where the drops should be appended in the DOM.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -2001,7 +2008,7 @@
             <h2>Mouse Tracker</h2>
 
             <div id="js-mousetracker" class="uk-position-relative">
-                <img src="images/photo.jpg" alt="">
+                <img src="images/photo.jpg" width="1800" height="1200" alt="">
                 <div class="uk-overlay uk-overlay-default uk-padding-small uk-position-center" style="height: 150px; width: 150px;">
                     <div id="js-mousetarget" class="uk-position-center"></div>
                 </div>

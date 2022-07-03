@@ -1,75 +1,53 @@
-import {$, flipPosition, offset as getOffset, includes, isNumeric, isRtl, positionAt, removeClasses, toggleClass} from 'uikit-util';
+import { flipPosition, getCssVar, includes, isRtl, positionAt, toPx } from 'uikit-util';
 
 export default {
-
     props: {
         pos: String,
         offset: null,
         flip: Boolean,
-        clsPos: String
     },
 
     data: {
-        pos: `bottom-${!isRtl ? 'left' : 'right'}`,
+        pos: `bottom-${isRtl ? 'right' : 'left'}`,
         flip: true,
         offset: false,
-        clsPos: ''
     },
 
-    computed: {
-
-        pos({pos}) {
-            return (pos + (!includes(pos, '-') ? '-center' : '')).split('-');
-        },
-
-        dir() {
-            return this.pos[0];
-        },
-
-        align() {
-            return this.pos[1];
-        }
-
+    connected() {
+        this.pos = this.$props.pos.split('-').concat('center').slice(0, 2);
+        this.axis = includes(['top', 'bottom'], this.pos[0]) ? 'y' : 'x';
     },
 
     methods: {
-
         positionAt(element, target, boundary) {
+            const [dir, align] = this.pos;
 
-            removeClasses(element, `${this.clsPos}-(top|bottom|left|right)(-[a-z]+)?`);
+            let offset = toPx(
+                this.offset === false ? getCssVar('position-offset', element) : this.offset,
+                this.axis === 'x' ? 'width' : 'height',
+                element
+            );
+            offset = [includes(['left', 'top'], dir) ? -offset : +offset, 0];
 
-            let {offset} = this;
-            const axis = this.getAxis();
+            const attach = {
+                element: [flipPosition(dir), align],
+                target: [dir, align],
+            };
 
-            if (!isNumeric(offset)) {
-                const node = $(offset);
-                offset = node
-                    ? getOffset(node)[axis === 'x' ? 'left' : 'top'] - getOffset(target)[axis === 'x' ? 'right' : 'bottom']
-                    : 0;
+            if (this.axis === 'y') {
+                for (const prop in attach) {
+                    attach[prop] = attach[prop].reverse();
+                }
+                offset = offset.reverse();
             }
 
-            const {x, y} = positionAt(
-                element,
-                target,
-                axis === 'x' ? `${flipPosition(this.dir)} ${this.align}` : `${this.align} ${flipPosition(this.dir)}`,
-                axis === 'x' ? `${this.dir} ${this.align}` : `${this.align} ${this.dir}`,
-                axis === 'x' ? `${this.dir === 'left' ? -offset : offset}` : ` ${this.dir === 'top' ? -offset : offset}`,
-                null,
-                this.flip,
-                boundary
-            ).target;
-
-            this.dir = axis === 'x' ? x : y;
-            this.align = axis === 'x' ? y : x;
-
-            toggleClass(element, `${this.clsPos}-${this.dir}-${this.align}`, this.offset === false);
-
+            positionAt(element, target, {
+                attach,
+                offset,
+                boundary,
+                flip: this.flip,
+                viewportOffset: toPx(getCssVar('position-viewport-offset', element)),
+            });
         },
-
-        getAxis() {
-            return this.dir === 'top' || this.dir === 'bottom' ? 'y' : 'x';
-        }
-
-    }
-
+    },
 };
