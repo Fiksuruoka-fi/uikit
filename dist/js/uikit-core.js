@@ -2178,6 +2178,7 @@
         isTag: isTag,
         empty: empty,
         html: html,
+        replaceChildren: replaceChildren,
         prepend: prepend,
         append: append,
         before: before,
@@ -3313,6 +3314,9 @@
           immediate: true } },
 
 
+              if (!el._wrapper) {
+                el._wrapper = wrapAll(content, "<div" + (show ? ' hidden' : '') + ">");
+              }
 
       connected() {
         this.lazyload();
@@ -3887,6 +3891,9 @@
           this.tracker.cancel();
         } }],
 
+          this.showTimer = setTimeout(
+          () => this.toggleElement(this.$el, true),
+          delay && this.delayShow || 0);
 
 
       update: {
@@ -6161,6 +6168,9 @@
           }
         } },
 
+        el() {
+          return this.panel;
+        },
 
       {
         name: 'touchmove',
@@ -6490,6 +6500,7 @@
 
         false));
 
+        false));
 
       },
 
