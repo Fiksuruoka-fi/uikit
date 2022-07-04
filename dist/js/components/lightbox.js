@@ -1,4 +1,4 @@
-/*! UIkit 3.14.1 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
+/*! UIkit 3.14.3 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('uikit-util')) :
@@ -152,6 +152,11 @@
 
             if (!uikitUtil.trigger(el, "before" + (show ? 'show' : 'hide'), [this])) {
               return Promise.reject();
+            }
+
+            if (!animate) {
+              uikitUtil.Animation.cancel(el);
+              uikitUtil.Transition.cancel(el);
             }
 
             const promise = (

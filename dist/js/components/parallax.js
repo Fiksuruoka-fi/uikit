@@ -1,4 +1,4 @@
-/*! UIkit 3.14.1 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
+/*! UIkit 3.14.3 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('uikit-util')) :
@@ -149,12 +149,17 @@
 
       computed: {
         props(properties, $el) {
-          return keys(props).reduce((result, prop) => {
-            if (!uikitUtil.isUndefined(properties[prop])) {
-              result[prop] = props[prop](prop, $el, properties[prop].slice());
+          const stops = {};
+          for (const prop in properties) {
+            if (prop in props && !uikitUtil.isUndefined(properties[prop])) {
+              stops[prop] = properties[prop].slice();
             }
-            return result;
-          }, {});
+          }
+          const result = {};
+          for (const prop in stops) {
+            result[prop] = props[prop](prop, $el, stops[prop], stops);
+          }
+          return result;
         } },
 
 
@@ -283,58 +288,66 @@
       };
     }
 
-    function backgroundFn(prop, el, stops) {
+    function backgroundFn(prop, el, stops, props) {
       if (stops.length === 1) {
         stops.unshift(0);
       }
 
-      prop = prop.substr(-1);
-      const attr = prop === 'y' ? 'height' : 'width';
-      stops = parseStops(stops, (stop) => uikitUtil.toPx(stop, attr, el));
+      const attr = prop === 'bgy' ? 'height' : 'width';
+      props[prop] = parseStops(stops, (stop) => uikitUtil.toPx(stop, attr, el));
 
-      const bgPos = getCssValue(el, "background-position-" + prop, '');
+      const bgProps = ['bgx', 'bgy'].filter((prop) => prop in props);
+      if (bgProps.length === 2 && prop === 'bgx') {
+        return uikitUtil.noop;
+      }
 
-      return getCssValue(el, 'backgroundSize', '') === 'cover' ?
-      backgroundCoverFn(prop, el, stops, bgPos, attr) :
-      setBackgroundPosFn(prop, stops, bgPos);
+      if (getCssValue(el, 'backgroundSize', '') === 'cover') {
+        return backgroundCoverFn(prop, el, stops, props);
+      }
+
+      const positions = {};
+      for (const prop of bgProps) {
+        positions[prop] = getBackgroundPos(el, prop);
+      }
+
+      return setBackgroundPosFn(bgProps, positions, props);
     }
 
-    function backgroundCoverFn(prop, el, stops, bgPos, attr) {
+    function backgroundCoverFn(prop, el, stops, props) {
       const dimImage = getBackgroundImageDimensions(el);
 
       if (!dimImage.width) {
         return uikitUtil.noop;
       }
 
-      const values = stops.map((_ref2) => {let [value] = _ref2;return value;});
-      const min = Math.min(...values);
-      const max = Math.max(...values);
-      const down = values.indexOf(min) < values.indexOf(max);
-
-      const diff = max - min;
-      let pos = (down ? -diff : 0) - (down ? min : max);
-
       const dimEl = {
         width: el.offsetWidth,
         height: el.offsetHeight };
 
 
-      const baseDim = uikitUtil.Dimensions.cover(dimImage, dimEl);
-      const span = baseDim[attr] - dimEl[attr];
+      const bgProps = ['bgx', 'bgy'].filter((prop) => prop in props);
 
-      if (span < diff) {
-        dimEl[attr] = baseDim[attr] + diff - span;
-      } else if (span > diff) {
-        const posPercentage = dimEl[attr] / uikitUtil.toPx(bgPos, attr, el, true);
+      const positions = {};
+      for (const prop of bgProps) {
+        const values = props[prop].map((_ref2) => {let [value] = _ref2;return value;});
+        const min = Math.min(...values);
+        const max = Math.max(...values);
+        const down = values.indexOf(min) < values.indexOf(max);
+        const diff = max - min;
 
-        if (posPercentage) {
-          pos -= (span - diff) / posPercentage;
-        }
+        positions[prop] = (down ? -diff : 0) - (down ? min : max) + "px";
+        dimEl[prop === 'bgy' ? 'height' : 'width'] += diff;
       }
 
       const dim = uikitUtil.Dimensions.cover(dimImage, dimEl);
 
-      const fn = setBackgroundPosFn(prop, stops, pos + "px");
+      for (const prop of bgProps) {
+        const attr = prop === 'bgy' ? 'height' : 'width';
+        const overflow = dim[attr] - dimEl[attr];
+        positions[prop] = "max(" + getBackgroundPos(el, prop) + ",-" + overflow + "px) + " + positions[prop];
+      }
+
+      const fn = setBackgroundPosFn(bgProps, positions, props);
       return (css, percent) => {
         fn(css, percent);
         css.backgroundSize = dim.width + "px " + dim.height + "px";
@@ -342,9 +355,16 @@
       };
     }
 
-    function setBackgroundPosFn(prop, stops, pos) {
+    function getBackgroundPos(el, prop) {
+      return getCssValue(el, "background-position-" + prop.substr(-1), '');
+    }
+
+    function setBackgroundPosFn(bgProps, positions, props) {
       return function (css, percent) {
-        css["background-position-" + prop] = "calc(" + pos + " + " + getValue(stops, percent) + "px)";
+        for (const prop of bgProps) {
+          const value = getValue(props[prop], percent);
+          css["background-position-" + prop.substr(-1)] = "calc(" + positions[prop] + " + " + value + "px)";
+        }
       };
     }
 
@@ -530,8 +550,23 @@
 
 
 
+    /*
+     * Inspired by https://gist.github.com/gre/1650294?permalink_comment_id=3477425#gistcomment-3477425
+     *
+     * linear: 0
+     * easeInSine: 0.5
+     * easeOutSine: -0.5
+     * easeInQuad: 1
+     * easeOutQuad: -1
+     * easeInCubic: 2
+     * easeOutCubic: -2
+     * easeInQuart: 3
+     * easeOutQuart: -3
+     * easeInQuint: 4
+     * easeOutQuint: -4
+     */
     function ease(percent, easing) {
-      return easing >= 0 ? Math.pow(percent, easing + 1) : 1 - Math.pow(1 - percent, -easing + 1);
+      return easing >= 0 ? Math.pow(percent, easing + 1) : 1 - Math.pow(1 - percent, 1 - easing);
     }
 
     // SVG elements do not inherit from HTMLElement

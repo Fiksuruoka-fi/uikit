@@ -1,4 +1,4 @@
-/*! UIkit 3.14.1 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
+/*! UIkit 3.14.3 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('uikit-util')) :
@@ -80,6 +80,11 @@
 
             if (!uikitUtil.trigger(el, "before" + (show ? 'show' : 'hide'), [this])) {
               return Promise.reject();
+            }
+
+            if (!animate) {
+              uikitUtil.Animation.cancel(el);
+              uikitUtil.Transition.cancel(el);
             }
 
             const promise = (
@@ -230,8 +235,7 @@
       data: {
         pos: "bottom-" + (uikitUtil.isRtl ? 'right' : 'left'),
         flip: true,
-        offset: false,
-        viewportPadding: 10 },
+        offset: false },
 
 
       connected() {
@@ -243,15 +247,11 @@
         positionAt(element, target, boundary) {
           const [dir, align] = this.pos;
 
-          let { offset } = this;
-          if (!uikitUtil.isNumeric(offset)) {
-            const node = uikitUtil.$(offset);
-            offset = node ?
-            uikitUtil.offset(node)[this.axis === 'x' ? 'left' : 'top'] -
-            uikitUtil.offset(target)[this.axis === 'x' ? 'right' : 'bottom'] :
-            0;
-          }
-          offset = uikitUtil.toPx(offset) + uikitUtil.toPx(uikitUtil.getCssVar('position-offset', element));
+          let offset = uikitUtil.toPx(
+          this.offset === false ? uikitUtil.getCssVar('position-offset', element) : this.offset,
+          this.axis === 'x' ? 'width' : 'height',
+          element);
+
           offset = [uikitUtil.includes(['left', 'top'], dir) ? -offset : +offset, 0];
 
           const attach = {
@@ -270,8 +270,8 @@
             attach,
             offset,
             boundary,
-            viewportPadding: this.boundaryAlign ? 0 : this.viewportPadding,
-            flip: this.flip });
+            flip: this.flip,
+            viewportOffset: uikitUtil.toPx(uikitUtil.getCssVar('position-viewport-offset', element)) });
 
         } } };
 

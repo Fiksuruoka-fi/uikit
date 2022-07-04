@@ -1,4 +1,4 @@
-/*! UIkit 3.14.1 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
+/*! UIkit 3.14.3 | https://www.getuikit.com | (c) 2014 - 2022 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -1182,14 +1182,15 @@
     }
 
     function empty(element) {
-      return replaceChildren(element, '');
+      element = $(element);
+      element.innerHTML = '';
+      return element;
     }
 
     function html(parent, html) {
-      return isUndefined(html) ? $(parent).innerHTML : replaceChildren(parent, html);
+      return isUndefined(html) ? $(parent).innerHTML : append(empty(parent), html);
     }
 
-    const replaceChildren = applyFn('replaceChildren');
     const prepend = applyFn('prepend');
     const append = applyFn('append');
     const before = applyFn('before');
@@ -1911,32 +1912,25 @@
     function offsetViewport(scrollElement) {
       let viewportElement = getViewport$1(scrollElement);
 
-      // iOS 12 returns <body> as scrollingElement
-      if (viewportElement === scrollingElement(viewportElement)) {
-        viewportElement = document.documentElement;
-      }
-
       let rect = offset(viewportElement);
       for (let [prop, dir, start, end] of [
       ['width', 'x', 'left', 'right'],
       ['height', 'y', 'top', 'bottom']])
       {
-        if (!isWindow(getViewport$1(viewportElement))) {
+        if (!isWindow(viewportElement)) {
           rect[start] += toFloat(css(viewportElement, "border" + ucfirst(start) + "Width"));
+        } else {
+          // iOS 12 returns <body> as scrollingElement
+          viewportElement = viewportElement.document.documentElement;
         }
-        rect[prop] = rect[dir] = (
-        isWindow(viewportElement) ? scrollingElement(viewportElement) : viewportElement)["client" +
-        ucfirst(prop)];
+        rect[prop] = rect[dir] = viewportElement["client" + ucfirst(prop)];
         rect[end] = rect[prop] + rect[start];
       }
       return rect;
     }
 
     function scrollingElement(element) {
-      const {
-        document: { scrollingElement } } =
-      toWindow(element);
-      return scrollingElement;
+      return toWindow(element).document.scrollingElement;
     }
 
     function getViewport$1(scrollElement) {
@@ -1990,6 +1984,10 @@
       return position;
     }
 
+    function moveBy(start, end, dim) {
+      return start === 'center' ? dim / 2 : start === end ? dim : 0;
+    }
+
     function attachToWithFlip(element, target, options) {
       const position = attachTo(element, target, options);
       const targetDim = offset(target);
@@ -2000,7 +1998,7 @@
         offset: elOffset,
         boundary,
         viewport,
-        viewportPadding } =
+        viewportOffset } =
       options;
 
       let viewports = scrollParents(element);
@@ -2021,9 +2019,9 @@
 
         viewport = getIntersectionArea(...viewports.filter(Boolean).map(offsetViewport));
 
-        if (viewportPadding) {
-          viewport[start] += viewportPadding;
-          viewport[end] -= viewportPadding;
+        if (viewportOffset) {
+          viewport[start] += viewportOffset;
+          viewport[end] -= viewportOffset;
         }
 
         if (boundary && !willFlip && position[prop] <= offset(boundary)[prop]) {
@@ -2080,19 +2078,21 @@
               return false;
             }
 
-            const newPos = attachToWithFlip(element, target, {
-              ...options,
-              attach: {
-                element: elAttach.map(flipDir).reverse(),
-                target: targetAttach.map(flipDir).reverse() },
+            if (flip === true || includes(flip, dirs[1 - i][1])) {
+              const newPos = attachToWithFlip(element, target, {
+                ...options,
+                attach: {
+                  element: elAttach.map(flipDir).reverse(),
+                  target: targetAttach.map(flipDir).reverse() },
 
-              offset: elOffset.reverse(),
-              flip: flip === true ? flip : [...flip, dirs[1 - i][1]],
-              recursion: true });
+                offset: elOffset.reverse(),
+                flip: flip === true ? flip : [...flip, dirs[1 - i][1]],
+                recursion: true });
 
 
-            if (newPos && isInScrollArea(newPos, scrollElement, 1 - i)) {
-              return newPos;
+              if (newPos && isInScrollArea(newPos, scrollElement, 1 - i)) {
+                return newPos;
+              }
             }
           }
 
@@ -2111,10 +2111,6 @@
       }
 
       return offsetPosition;
-    }
-
-    function moveBy(start, end, dim) {
-      return start === 'center' ? dim / 2 : start === end ? dim : 0;
     }
 
     function getIntersectionArea() {
@@ -2954,7 +2950,7 @@
     UIkit.data = '__uikit__';
     UIkit.prefix = 'uk-';
     UIkit.options = {};
-    UIkit.version = '3.14.1';
+    UIkit.version = '3.14.3';
 
     globalAPI(UIkit);
     hooksAPI(UIkit);
@@ -3101,6 +3097,11 @@
 
             if (!trigger(el, "before" + (show ? 'show' : 'hide'), [this])) {
               return Promise.reject();
+            }
+
+            if (!animate) {
+              Animation.cancel(el);
+              Transition.cancel(el);
             }
 
             const promise = (
@@ -3313,6 +3314,9 @@
           immediate: true } },
 
 
+              if (!el._wrapper) {
+                el._wrapper = wrapAll(content, "<div" + (show ? ' hidden' : '') + ">");
+              }
 
       connected() {
         this.lazyload();
@@ -3582,8 +3586,7 @@
       data: {
         pos: "bottom-" + (isRtl ? 'right' : 'left'),
         flip: true,
-        offset: false,
-        viewportPadding: 10 },
+        offset: false },
 
 
       connected() {
@@ -3595,16 +3598,12 @@
         positionAt(element, target, boundary) {
           const [dir, align] = this.pos;
 
-          let { offset: offset$1 } = this;
-          if (!isNumeric(offset$1)) {
-            const node = $(offset$1);
-            offset$1 = node ?
-            offset(node)[this.axis === 'x' ? 'left' : 'top'] -
-            offset(target)[this.axis === 'x' ? 'right' : 'bottom'] :
-            0;
-          }
-          offset$1 = toPx(offset$1) + toPx(getCssVar('position-offset', element));
-          offset$1 = [includes(['left', 'top'], dir) ? -offset$1 : +offset$1, 0];
+          let offset = toPx(
+          this.offset === false ? getCssVar('position-offset', element) : this.offset,
+          this.axis === 'x' ? 'width' : 'height',
+          element);
+
+          offset = [includes(['left', 'top'], dir) ? -offset : +offset, 0];
 
           const attach = {
             element: [flipPosition(dir), align],
@@ -3615,15 +3614,15 @@
             for (const prop in attach) {
               attach[prop] = attach[prop].reverse();
             }
-            offset$1 = offset$1.reverse();
+            offset = offset.reverse();
           }
 
           positionAt(element, target, {
             attach,
-            offset: offset$1,
+            offset,
             boundary,
-            viewportPadding: this.boundaryAlign ? 0 : this.viewportPadding,
-            flip: this.flip });
+            flip: this.flip,
+            viewportOffset: toPx(getCssVar('position-viewport-offset', element)) });
 
         } } };
 
@@ -3892,6 +3891,9 @@
           this.tracker.cancel();
         } }],
 
+          this.showTimer = setTimeout(
+          () => this.toggleElement(this.$el, true),
+          delay && this.delayShow || 0);
 
 
       update: {
@@ -3974,19 +3976,27 @@
           toggleClass(this.$el, this.clsDrop + "-boundary", this.boundaryAlign);
 
           const boundary = query(this.boundary, this.$el);
-          const [scrollParent] = scrollParents(this.$el);
-          const scrollParentOffset = offsetViewport(scrollParent);
+          const scrollParentOffset = offset(
+          scrollParents(boundary && this.boundaryAlign ? boundary : this.$el)[0]);
+
           const boundaryOffset = boundary ? offset(boundary) : scrollParentOffset;
 
           css(this.$el, 'maxWidth', '');
           const maxWidth =
-          scrollParentOffset.width - (this.boundaryAlign ? 0 : 2 * this.viewportPadding);
+          scrollParentOffset.width -
+          2 * toPx(getCssVar('position-viewport-offset', this.$el));
 
           if (this.pos[1] === 'justify') {
             const prop = this.axis === 'y' ? 'width' : 'height';
-            const targetOffset = offset(this.target);
-            const alignTo = this.boundaryAlign ? boundaryOffset : targetOffset;
-            css(this.$el, prop, alignTo[prop]);
+            css(
+            this.$el,
+            prop,
+            Math.min(
+            (boundary ? boundaryOffset : offset(this.target))[prop],
+            scrollParentOffset[prop] -
+            2 * toPx(getCssVar('position-viewport-offset', this.$el))));
+
+
           } else if (this.$el.offsetWidth > maxWidth) {
             addClass(this.$el, this.clsDrop + "-stack");
           }
@@ -4464,7 +4474,7 @@
     }
 
     var heightViewport = {
-      mixins: [Class, Resize],
+      mixins: [Resize],
 
       props: {
         expand: Boolean,
@@ -5866,19 +5876,19 @@
           return this.dropbar;
         },
 
-        handler(_, _ref10) {let { $el, pos: [dir] = [] } = _ref10;
+        handler(_, _ref10) {let { $el } = _ref10;
           if (!hasClass($el, this.clsDrop)) {
             return;
           }
 
-          if (dir === 'bottom') {
-            this.transitionTo(
-            offset($el).bottom -
-            offset(this.dropbar).top +
-            toFloat(css($el, 'marginBottom')),
-            $el);
+          this._observer = observeResize($el, () =>
+          this.transitionTo(
+          offset($el).bottom -
+          offset(this.dropbar).top +
+          toFloat(css($el, 'marginBottom')),
+          $el));
 
-          }
+
         } },
 
 
@@ -5922,6 +5932,8 @@
             return;
           }
 
+          this._observer.disconnect();
+
           const active = this.getActive();
 
           if (!active || (active == null ? void 0 : active.$el) === $el) {
@@ -5938,7 +5950,7 @@
 
         transitionTo(newHeight, el) {
           const { dropbar } = this;
-          const oldHeight = isVisible(dropbar) ? height(dropbar) : 0;
+          const oldHeight = height(dropbar);
 
           el = oldHeight < newHeight && el;
 
@@ -5947,7 +5959,7 @@
           height(dropbar, oldHeight);
 
           Transition.cancel([el, dropbar]);
-          return Promise.all([
+          Promise.all([
           Transition.start(dropbar, { height: newHeight }, this.duration),
           Transition.start(
           el,
@@ -5956,10 +5968,7 @@
 
 
           catch(noop).
-          then(() => {
-            css(el, { clip: '' });
-            this.$update(dropbar);
-          });
+          then(() => css(el, { clip: '' }));
         },
 
         getDropdown(el) {
@@ -6159,6 +6168,9 @@
           }
         } },
 
+        el() {
+          return this.panel;
+        },
 
       {
         name: 'touchmove',
@@ -6488,6 +6500,7 @@
 
         false));
 
+        false));
 
       },
 
@@ -6524,6 +6537,10 @@
       methods: {
         toggle(el, inview) {
           const state = this._data.elements.get(el);
+
+          if (!state) {
+            return;
+          }
 
           state.off == null ? void 0 : state.off();
 
@@ -7260,6 +7277,8 @@
         },
 
         handler(e) {
+          this._preventClick = null;
+
           if (!isTouch(e) || this._showState) {
             return;
           }
@@ -7339,9 +7358,14 @@
       {
         name: 'click',
 
+        filter() {
+          return ['click', 'hover'].some((mode) => includes(this.mode, mode));
+        },
+
         handler(e) {
           let link;
           if (
+          this._preventClick ||
           closest(e.target, 'a[href="#"], a[href=""]') ||
           (link = closest(e.target, 'a[href]')) && (
           attr(this.$el, 'aria-expanded') !== 'true' ||
@@ -7350,15 +7374,9 @@
             e.preventDefault();
           }
 
-          if (this._preventClick) {
-            return this._preventClick = null;
+          if (!this._preventClick && includes(this.mode, 'click')) {
+            this.toggle();
           }
-
-          if (!includes(this.mode, 'click')) {
-            return;
-          }
-
-          this.toggle();
         } },
 
 
