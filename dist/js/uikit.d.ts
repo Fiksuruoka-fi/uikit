@@ -8,7 +8,6 @@ export interface Plugin {
 }
 
 export namespace UIkit {
-  const util: object
   const component: object
   const data: string
   const prefix: string
@@ -491,7 +490,7 @@ export namespace UIkit {
   }
 
   interface UIkitNotificationElement {
-    $el: UIkitElement
+    $el: HTMLElement
     close(immediate: boolean): void
   }
 
@@ -636,6 +635,67 @@ export namespace UIkit {
 
   type Upload = (element: UIkitElement, options?: UIkitUploadOptions) => void
 
+  interface OffsetResult {
+    top: number;
+    left: number;
+    bottom: number;
+    right: number;
+    height: number;
+    width: number;
+    x: number;
+    y: number;
+  }
+
+  interface ScrollElement extends HTMLElement {
+    scrollTop: number;
+    scrollHeight: number;
+    offsetHeight: number;
+  }
+
+  export interface UIkitEventUtil {
+    on: (
+      targets: EventTargets,
+      types: EventTypes,
+      selector?: string,
+      listener: EventListener,
+      useCapture?: UseCaptureOption
+    ) => () => void;
+    off: (
+      targets: EventTargets,
+      types: EventTypes,
+      selector?: string,
+      listener?: EventListener,
+      useCapture?: UseCaptureOption
+    ) => void;
+    once: (
+      element: EventTargets,
+      types: EventTypes,
+      selector?: string,
+      listener: EventListener,
+      useCapture?: UseCaptureOption,
+      condition?: Condition
+    ) => () => void;
+    trigger: (targets: EventTargets, event: string | Event, detail?: EventDetail) => boolean;
+    createEvent: (
+      e: string | Event,
+      bubbles?: boolean,
+      cancelable?: boolean,
+      detail?: any
+    ) => Event;
+    isTouch: (e: PointerEvent | TouchEvent) => boolean;
+    getEventPos: (e: PointerEvent | TouchEvent) => { x: number; y: number };
+  }
+
+  interface Util extends UIkitEventUtil {
+    isInView: (element: UIkitElement, offsetTop = 0, offsetLeft = 0) => boolean
+    scrollIntoView: (element: UIkitElement, options?: { offset?: number }) => Promise<void>;
+    scrolledOver: (element: UIkitElement, startOffset?: number, endOffset?: number) => number;
+    scrollParents: (element: UIkitElement, scrollable?: boolean, props?: string[]) => UIkitElement[];
+    scrollParent: (element: UIkitElement, scrollable?: boolean, props?: string[]) => UIkitElement;
+    overflowParents: (element: UIkitElement) => UIkitElement[];
+    offsetViewport: (scrollElement: ScrollElement) => OffsetResult;
+  }
+
   // Core
   const accordion: Accordion
   const alert: Alert
@@ -675,6 +735,9 @@ export namespace UIkit {
   const sortable: Sortable
   const tooltip: Tooltip
   const upload: Upload
+
+  // Utils
+  const util: Util
 }
 
 declare module 'uikit' {
